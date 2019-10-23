@@ -15,6 +15,7 @@ class TextBoxFrame(pygame.sprite.DirtySprite):
         bg_color=(0, 0, 0),
         corner=None,
         side=None,
+        colorkey=None
     ):
         super().__init__()
 
@@ -32,15 +33,20 @@ class TextBoxFrame(pygame.sprite.DirtySprite):
         self.corner_sprite = pygame.image.load(corner).convert()
         self.side_sprite = pygame.image.load(side).convert()
 
+        # Set this color in border sprites to transparent.
+        if colorkey:
+            self.corner_sprite.set_colorkey(colorkey)
+            self.side_sprite.set_colorkey(colorkey)
+
         self.blocks = {
             "TOP_LEFT": self.corner_sprite,
             "TOP_RIGHT": pygame.transform.rotate(self.corner_sprite, -90),
             "BOTTOM_LEFT": pygame.transform.rotate(self.corner_sprite, 90),
             "BOTTOM_RIGHT": pygame.transform.rotate(self.corner_sprite, 180),
             "LEFT": self.side_sprite,
-            "RIGHT": self.side_sprite,
+            "RIGHT": pygame.transform.rotate(self.side_sprite, 180),
             "TOP": pygame.transform.rotate(self.side_sprite, -90),
-            "BOTTOM": pygame.transform.rotate(self.side_sprite, -90),
+            "BOTTOM": pygame.transform.rotate(self.side_sprite, 90),
         }
 
         # Text box size including the frame.

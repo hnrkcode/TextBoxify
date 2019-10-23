@@ -33,8 +33,9 @@ def main():
             pos=(600, 50),
             padding=(50, 50),
             bg_color=(117, 80, 123),
-            corner="assets/frames/corner_white2.png",
-            side="assets/frames/side_white2.png",
+            corner="assets/frames/pink_corner.png",
+            side="assets/frames/pink_side.png",
+            colorkey=(255, 255, 255),
         ),
         TextBox(
             message,
