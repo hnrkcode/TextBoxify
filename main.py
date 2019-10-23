@@ -1,7 +1,7 @@
 import pygame
 from pygame import locals
 from textboxify.text import Text
-from textboxify.textbox import TextBox
+from textboxify.textbox import TextBox, TextBoxFrame
 
 
 def main():
@@ -15,7 +15,10 @@ def main():
     with open("text/sample.txt", "r") as f:
         message = f.read()
 
-    boxes = [TextBox(message, box_width=450, lines=4, pos=(100, 100))]
+    boxes = [
+        TextBoxFrame(message, text_width=500, lines=6, pos=(100, 100), padding=(200, 150), bg_color=(23,23,23)),
+        TextBox(message, text_width=500, lines=6, pos=(700, 500), bg_color=(23,23,23), transparent=False),
+    ]
 
     all = pygame.sprite.LayeredDirty(boxes)
     all.clear(screen, background)
