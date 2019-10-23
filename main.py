@@ -12,7 +12,7 @@ def main():
     background = pygame.Surface(screen.get_size()).convert()
     background.fill((85, 87, 83))
 
-    with open("text/sample.txt", "r") as f:
+    with open("assets/texts/sample.txt", "r") as f:
         message = f.read()
 
     boxes = [
