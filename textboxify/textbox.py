@@ -128,6 +128,12 @@ class TextBox(pygame.sprite.DirtySprite):
         self.words = self.convert_text(text)
         self.linesize = Text(self.words[0]).linesize
 
+        # Offset have to be set to zero to be able to print one liners.
+        if lines == 1:
+            self.offset = 0
+        else:
+            self.offset = self.linesize
+
         # Text cursor position.
         self.x, self.y = 0, 0
         # Box dimensions.
@@ -189,7 +195,7 @@ class TextBox(pygame.sprite.DirtySprite):
             word_surface = Text(word_string)
 
             # Print new words until all lines in the box are filled.
-            if self.y < self.h - self.linesize:
+            if self.y < self.h - self.offset:
 
                 # Print new words until the current line is filled.
                 if self.x + word_surface.width < self.w:
