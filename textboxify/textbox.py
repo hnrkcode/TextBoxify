@@ -5,7 +5,17 @@ from .text import Text
 
 
 class TextBoxFrame(pygame.sprite.DirtySprite):
-    def __init__(self, text, text_width, lines, pos, padding=(100, 50), bg_color=(0, 0, 0)):
+    def __init__(
+        self,
+        text,
+        text_width,
+        lines,
+        pos,
+        padding=(100, 50),
+        bg_color=(0, 0, 0),
+        corner=None,
+        side=None,
+    ):
         super().__init__()
 
         # Background color.
@@ -17,15 +27,74 @@ class TextBoxFrame(pygame.sprite.DirtySprite):
         # Text content.
         self.textbox = TextBox(text, text_width, lines, pos, bg_color)
         self.words = self.textbox.words
-        self.reset = self.textbox.reset
+
+        # Frame style.
+        self.corner_sprite = pygame.image.load(corner).convert()
+        self.side_sprite = pygame.image.load(side).convert()
+
+        self.blocks = {
+            "TOP_LEFT": self.corner_sprite,
+            "TOP_RIGHT": pygame.transform.rotate(self.corner_sprite, -90),
+            "BOTTOM_LEFT": pygame.transform.rotate(self.corner_sprite, 90),
+            "BOTTOM_RIGHT": pygame.transform.rotate(self.corner_sprite, 180),
+            "LEFT": self.side_sprite,
+            "RIGHT": self.side_sprite,
+            "TOP": pygame.transform.rotate(self.side_sprite, -90),
+            "BOTTOM": pygame.transform.rotate(self.side_sprite, -90),
+        }
 
         # Text box size including the frame.
-        self.size = (text_width + padding[0], self.textbox.linesize * lines + padding[1])
+        self.size = (
+            text_width + padding[0],
+            self.textbox.linesize * lines + padding[1],
+        )
+        self.size = self.adjust_size(self.size)
 
         self.image = pygame.Surface(self.size).convert()
         self.image.fill(bg_color)
         self.rect = self.image.get_rect()
         self.rect.topleft = pos
+
+    def adjust_size(self, size):
+        """Adjust the box size after the box border sprites."""
+
+        w = size[0] - size[0] % self.side_sprite.get_width()
+        h = size[1] - size[1] % self.side_sprite.get_height()
+
+        return (w, h)
+
+    def style_box(self, src, dest, blocks, type):
+        """Draw the borders of the dialog box."""
+
+        src_w, src_h = src.get_size()
+        dest_w, dest_h = dest.get_size()
+
+        if type == "CORNER":
+            dest.blit(blocks["TOP_LEFT"], (0, 0))
+            dest.blit(blocks["TOP_RIGHT"], (dest_w - src_w, 0))
+            dest.blit(blocks["BOTTOM_LEFT"], (0, dest_h - src_h))
+            dest.blit(blocks["BOTTOM_RIGHT"], (dest_w - src_w, dest_h - src_h))
+
+        elif type == "SIDE":
+            # Left & right side
+            for block in range(1, dest_h // src_h - 1):
+                dest.blit(blocks["LEFT"], (0, 0 + src_h * block))
+                dest.blit(blocks["RIGHT"], (dest_w - src_w, 0 + src_h * block))
+
+            # Top & bottom side
+            for block in range(1, dest_w // src_h - 1):
+                dest.blit(blocks["TOP"], (0 + src_w * block, 0))
+                dest.blit(blocks["BOTTOM"], (0 + src_w * block, dest_h - src_h))
+
+    def reset(self):
+        """Reset the filled box and continue with the remaining words."""
+
+        if self.textbox.full_box:
+
+            self.textbox.reset()
+
+            self.style_box(self.corner_sprite, self.image, self.blocks, "CORNER")
+            self.style_box(self.side_sprite, self.image, self.blocks, "SIDE")
 
     def update(self):
         """Update the text box."""
@@ -40,11 +109,18 @@ class TextBoxFrame(pygame.sprite.DirtySprite):
 
         # Draw the new text.
         self.image.blit(self.textbox.image, padding)
+
+        # Draw box border.
+        self.style_box(self.corner_sprite, self.image, self.blocks, "CORNER")
+        self.style_box(self.side_sprite, self.image, self.blocks, "SIDE")
+
         self.dirty = 1
 
 
 class TextBox(pygame.sprite.DirtySprite):
-    def __init__(self, text, text_width, lines, pos, bg_color=(0, 0, 0), transparent=True):
+    def __init__(
+        self, text, text_width, lines, pos, bg_color=(0, 0, 0), transparent=True
+    ):
         super().__init__()
 
         self.bg_color = bg_color

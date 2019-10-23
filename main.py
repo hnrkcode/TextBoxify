@@ -16,8 +16,42 @@ def main():
         message = f.read()
 
     boxes = [
-        TextBoxFrame(message, text_width=500, lines=6, pos=(100, 100), padding=(200, 150), bg_color=(23,23,23)),
-        TextBox(message, text_width=500, lines=6, pos=(700, 500), bg_color=(23,23,23), transparent=False),
+        TextBoxFrame(
+            message,
+            text_width=250,
+            lines=4,
+            pos=(100, 100),
+            padding=(200, 150),
+            bg_color=(23, 23, 23),
+            corner="assets/frames/corner_white.png",
+            side="assets/frames/side_white.png",
+        ),
+        TextBoxFrame(
+            message,
+            text_width=250,
+            lines=3,
+            pos=(600, 50),
+            padding=(50, 50),
+            bg_color=(23, 23, 23),
+            corner="assets/frames/corner_white2.png",
+            side="assets/frames/side_white2.png",
+        ),
+        TextBox(
+            message,
+            text_width=500,
+            lines=6,
+            pos=(700, 500),
+            bg_color=(23, 23, 23),
+            transparent=False,
+        ),
+        TextBox(
+            message,
+            text_width=300,
+            lines=2,
+            pos=(50, 450),
+            bg_color=(23, 23, 23),
+            transparent=True,
+        ),
     ]
 
     all = pygame.sprite.LayeredDirty(boxes)
