@@ -5,14 +5,16 @@ from textboxify.text import Text
 from textboxify.textbox import TextBox, TextBoxFrame
 from textboxify.util import sprite_slice
 
+WIDTH, HEIGHT = 1280, 720
 
 def main():
     pygame.init()
     fps = 60
     clock = pygame.time.Clock()
-    screen = pygame.display.set_mode((1280, 720))
+    screen = pygame.display.set_mode((WIDTH, HEIGHT))
     background = pygame.Surface(screen.get_size()).convert()
-    background.fill((85, 87, 83))
+    #background.fill((85, 87, 83))
+    background.blit(pygame.image.load("assets/color.jpg"), (0, 0))
 
     with open("assets/texts/sample.txt", "r") as f:
         message = f.read()
@@ -35,6 +37,7 @@ def main():
             pos=(10, 300),
             padding=(100, 50),
             bg_color=(117, 80, 123),
+            font_color=(233, 140, 228),
             corner="assets/border/pink_corner.png",
             side="assets/border/pink_side.png",
             frame_colorkey=(255, 255, 255),
@@ -45,14 +48,14 @@ def main():
             lines=1,
             pos=(10, 450),
             bg_color=(23, 23, 23),
-            transparent=True,
         ),
         TextBox(
             message,
-            text_width=500,
+            text_width=WIDTH,
             lines=6,
-            pos=(10, 500),
+            pos=(0, 500),
             bg_color=(23, 23, 23),
+            font_color=(239, 41, 41),
             transparent=False,
         ),
     ]

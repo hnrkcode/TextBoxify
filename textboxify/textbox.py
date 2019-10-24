@@ -14,10 +14,12 @@ class TextBoxFrame(pygame.sprite.DirtySprite):
         lines,
         pos,
         padding=(50, 50),
+        font_color=(255, 255, 255),
         bg_color=(0, 0, 0),
         corner=None,
         side=None,
         frame_colorkey=None,
+        transparent=True,
     ):
         super().__init__()
 
@@ -31,7 +33,15 @@ class TextBoxFrame(pygame.sprite.DirtySprite):
         self.padding = padding
 
         # Text content.
-        self.textbox = TextBox(text, text_width, lines, pos, bg_color)
+        self.textbox = TextBox(
+            text=text,
+            text_width=text_width,
+            lines=lines,
+            pos=pos,
+            font_color=font_color,
+            bg_color=bg_color,
+            transparent=transparent,
+        )
         self.words = self.textbox.words
 
         # Frame style.
@@ -136,10 +146,11 @@ class TextBoxFrame(pygame.sprite.DirtySprite):
 
 class TextBox(pygame.sprite.DirtySprite):
     def __init__(
-        self, text, text_width, lines, pos, bg_color=(0, 0, 0), transparent=True
+        self, text, text_width, lines, pos, font_color=(255, 255, 255), bg_color=(0, 0, 0), transparent=True
     ):
         super().__init__()
 
+        self.font_color = font_color
         self.bg_color = bg_color
         self.full_box = False
         self.words = self.convert_text(text)
@@ -212,7 +223,7 @@ class TextBox(pygame.sprite.DirtySprite):
         if self.words and not self.full_box:
 
             word_string = self.split_long_word(self.words.pop(0))
-            word_surface = Text(word_string)
+            word_surface = Text(word_string, color=self.font_color)
 
             # Print new words until all lines in the box are filled.
             if self.y < self.h - self.offset:
