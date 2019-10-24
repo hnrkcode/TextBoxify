@@ -25,8 +25,8 @@ def main():
             pos=(10, 10),
             padding=(200, 150),
             bg_color=(23, 23, 23),
-            corner="assets/frames/corner_white.png",
-            side="assets/frames/side_white.png",
+            corner="assets/border/corner_white.png",
+            side="assets/border/side_white.png",
         ),
         TextBoxFrame(
             message,
@@ -35,8 +35,8 @@ def main():
             pos=(10, 300),
             padding=(100, 50),
             bg_color=(117, 80, 123),
-            corner="assets/frames/pink_corner.png",
-            side="assets/frames/pink_side.png",
+            corner="assets/border/pink_corner.png",
+            side="assets/border/pink_side.png",
             frame_colorkey=(255, 255, 255),
         ),
         TextBox(
