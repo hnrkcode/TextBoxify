@@ -1,7 +1,9 @@
 import pygame
 from pygame import locals
+
 from textboxify.text import Text
 from textboxify.textbox import TextBox, TextBoxFrame
+from textboxify.util import sprite_slice
 
 
 def main():
@@ -35,7 +37,7 @@ def main():
             bg_color=(117, 80, 123),
             corner="assets/frames/pink_corner.png",
             side="assets/frames/pink_side.png",
-            colorkey=(255, 255, 255),
+            frame_colorkey=(255, 255, 255),
         ),
         TextBox(
             message,
@@ -55,8 +57,10 @@ def main():
         ),
     ]
 
-    all = pygame.sprite.LayeredDirty(boxes)
-    all.clear(screen, background)
+    boxes[0].set_idle_animation("assets/idle/arrow.png", (25, 25), (0, 0, 0))
+
+    box_group = pygame.sprite.LayeredDirty(boxes)
+    box_group.clear(screen, background)
 
     while True:
         # Limit frame rate.
@@ -69,14 +73,14 @@ def main():
                 if event.key == locals.K_ESCAPE:
                     raise SystemExit()
                 if event.key == locals.K_RETURN:
-                    for box in all.sprites():
+                    for box in box_group.sprites():
                         if box.words:
                             box.reset()
                         else:
                             box.kill()
 
-        all.update()
-        rects = all.draw(screen)
+        box_group.update()
+        rects = box_group.draw(screen)
         pygame.display.update(rects)
 
 

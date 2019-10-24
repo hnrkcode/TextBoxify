@@ -1,8 +1,9 @@
-import pygame
 import string
 
+import pygame
+
 from .text import Text
-from textboxify.util import load_image
+from .util import IdleBoxSymbol, load_image
 
 
 class TextBoxFrame(pygame.sprite.DirtySprite):
@@ -12,13 +13,16 @@ class TextBoxFrame(pygame.sprite.DirtySprite):
         text_width,
         lines,
         pos,
-        padding=(100, 50),
+        padding=(50, 50),
         bg_color=(0, 0, 0),
         corner=None,
         side=None,
-        colorkey=None
+        frame_colorkey=None,
     ):
         super().__init__()
+
+        # Idle box animation.
+        self.idle_symbol = None
 
         # Background color.
         self.bg_color = bg_color
@@ -31,8 +35,8 @@ class TextBoxFrame(pygame.sprite.DirtySprite):
         self.words = self.textbox.words
 
         # Frame style.
-        self.corner_sprite = load_image(corner, colorkey)
-        self.side_sprite = load_image(side, colorkey)
+        self.corner_sprite = load_image(corner, frame_colorkey)
+        self.side_sprite = load_image(side, frame_colorkey)
 
         self.blocks = {
             "TOP_LEFT": self.corner_sprite,
@@ -56,6 +60,11 @@ class TextBoxFrame(pygame.sprite.DirtySprite):
         self.image.fill(bg_color)
         self.rect = self.image.get_rect()
         self.rect.topleft = pos
+
+    def set_idle_animation(self, sprite, size, colorkey=None):
+        """Initilize animated idle symbol."""
+
+        self.idle_symbol = IdleBoxSymbol(sprite, size, colorkey)
 
     def adjust_size(self, size):
         """Adjust the box size after the box border sprites."""
@@ -116,6 +125,12 @@ class TextBoxFrame(pygame.sprite.DirtySprite):
         self.style_box(self.corner_sprite, self.image, self.blocks, "CORNER")
         self.style_box(self.side_sprite, self.image, self.blocks, "SIDE")
 
+        # Draw animated idling symbol.
+        if self.textbox.idle and self.idle_symbol:
+            self.idle_symbol.animate(pygame.time.get_ticks())
+            pos = (self.size[0] - padding[0], self.size[1] - padding[1])
+            self.image.blit(self.idle_symbol.image, pos)
+
         self.dirty = 1
 
 
@@ -158,6 +173,8 @@ class TextBox(pygame.sprite.DirtySprite):
         # Use the widest character to be sure that everything will fits.
         self.max = self.w // self.widest_char
 
+        self.idle = False
+
     def convert_text(self, msg):
         """Convert string into list with words and characters to print."""
 
@@ -185,6 +202,7 @@ class TextBox(pygame.sprite.DirtySprite):
             self.image.fill(self.bg_color)
             self.x, self.y = 0, 0
             self.full_box = False
+            self.idle = False
             self.dirty = 1
 
     def update(self):
@@ -219,4 +237,4 @@ class TextBox(pygame.sprite.DirtySprite):
 
         # Stuff to do while box is idle.
         else:
-            pass
+            self.idle = True
