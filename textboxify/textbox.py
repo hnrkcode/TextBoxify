@@ -2,6 +2,7 @@ import pygame
 import string
 
 from .text import Text
+from textboxify.util import load_image
 
 
 class TextBoxFrame(pygame.sprite.DirtySprite):
@@ -30,13 +31,8 @@ class TextBoxFrame(pygame.sprite.DirtySprite):
         self.words = self.textbox.words
 
         # Frame style.
-        self.corner_sprite = pygame.image.load(corner).convert()
-        self.side_sprite = pygame.image.load(side).convert()
-
-        # Set this color in border sprites to transparent.
-        if colorkey:
-            self.corner_sprite.set_colorkey(colorkey)
-            self.side_sprite.set_colorkey(colorkey)
+        self.corner_sprite = load_image(corner, colorkey)
+        self.side_sprite = load_image(side, colorkey)
 
         self.blocks = {
             "TOP_LEFT": self.corner_sprite,

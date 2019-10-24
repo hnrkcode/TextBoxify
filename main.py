@@ -18,9 +18,9 @@ def main():
     boxes = [
         TextBoxFrame(
             message,
-            text_width=250,
+            text_width=450,
             lines=4,
-            pos=(100, 100),
+            pos=(10, 10),
             padding=(200, 150),
             bg_color=(23, 23, 23),
             corner="assets/frames/corner_white.png",
@@ -28,10 +28,10 @@ def main():
         ),
         TextBoxFrame(
             message,
-            text_width=250,
+            text_width=550,
             lines=3,
-            pos=(600, 50),
-            padding=(50, 50),
+            pos=(10, 300),
+            padding=(100, 50),
             bg_color=(117, 80, 123),
             corner="assets/frames/pink_corner.png",
             side="assets/frames/pink_side.png",
@@ -39,19 +39,19 @@ def main():
         ),
         TextBox(
             message,
-            text_width=500,
-            lines=6,
-            pos=(700, 500),
+            text_width=800,
+            lines=1,
+            pos=(10, 450),
             bg_color=(23, 23, 23),
-            transparent=False,
+            transparent=True,
         ),
         TextBox(
             message,
-            text_width=800,
-            lines=1,
-            pos=(50, 450),
+            text_width=500,
+            lines=6,
+            pos=(10, 500),
             bg_color=(23, 23, 23),
-            transparent=True,
+            transparent=False,
         ),
     ]
 
