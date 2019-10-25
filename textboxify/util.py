@@ -16,7 +16,7 @@ def load_image(file, colorkey):
     return image
 
 
-def sprite_slice(file, size, colorkey=None):
+def sprite_slice(file, size, colorkey=None, scale=None):
     """Slice image into smaller images."""
 
     frames = []
@@ -29,7 +29,12 @@ def sprite_slice(file, size, colorkey=None):
     # Slice image from left to right.
     for i in range(int(master_width / frame_width)):
         left = i * frame_width
-        frame = master_image.subsurface((left, 0, frame_width, frame_height))
+
+        if not scale:
+            frame = master_image.subsurface((left, 0, frame_width, frame_height))
+        else:
+            frame = master_image.subsurface((left, 0, frame_width, frame_height))
+            frame = pygame.transform.scale(frame, scale)
         frames.append(frame)
 
     return frames
@@ -66,6 +71,19 @@ class IdleBoxSymbol(AnimateSprite):
     def __init__(self, file, size, colorkey=None):
         super().__init__()
         self._images = sprite_slice(file, size, colorkey)
+        self.image = self._images[0]
+        self.rect = self.image.get_rect()
+
+    def update(self):
+        self.dirty = 1
+
+
+class CharacterPortrait(AnimateSprite):
+    """Implement symbol that indicate box is idle."""
+
+    def __init__(self, file, size, colorkey=None, scale=None):
+        super().__init__()
+        self._images = sprite_slice(file, size, colorkey, scale=scale)
         self.image = self._images[0]
         self.rect = self.image.get_rect()
 

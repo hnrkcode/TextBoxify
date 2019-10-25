@@ -3,7 +3,7 @@ import string
 import pygame
 
 from .text import Text
-from .util import IdleBoxSymbol, load_image
+from .util import IdleBoxSymbol, CharacterPortrait, load_image
 
 
 class TextBoxFrame(pygame.sprite.DirtySprite):
@@ -23,6 +23,8 @@ class TextBoxFrame(pygame.sprite.DirtySprite):
     ):
         super().__init__()
 
+        self.lines = lines
+
         # Initialize text content.
         self.textbox = TextBox(
             text=text,
@@ -34,11 +36,16 @@ class TextBoxFrame(pygame.sprite.DirtySprite):
             transparent=transparent,
         )
 
+        self.text_width = text_width
+
         # Words to print.
         self.words = self.textbox.words
 
         # Idle box animation.
         self.idle_symbol = None
+
+        # Portrait image.
+        self.portrait = None
 
         # Background color.
         self.bg_color = bg_color
@@ -79,6 +86,27 @@ class TextBoxFrame(pygame.sprite.DirtySprite):
         """Initilize animated idle symbol."""
 
         self.idle_symbol = IdleBoxSymbol(sprite, size, colorkey)
+
+    def set_portrait(self, sprite, size, colorkey=None):
+        """Initilize picture of the character in the box."""
+
+        # Portrait should have the same height as the text lines.
+        text_height = self.textbox.linesize * self.lines
+        scale = (text_height, text_height)
+
+        self.portrait = CharacterPortrait(sprite, size, colorkey, scale)
+
+        size = (
+            self.portrait.image.get_width() + self.text_width + self.padding[0],
+            self.size[1],
+        )
+
+        self.size = self.adjust_size(size)
+        self.image = pygame.Surface(self.size).convert()
+        self.image.fill(self.bg_color)
+        pos = self.rect.topleft
+        self.rect = self.image.get_rect()
+        self.rect.topleft = pos
 
     def adjust_size(self, size):
         """Adjust the box size after the box border sprites."""
@@ -132,18 +160,31 @@ class TextBoxFrame(pygame.sprite.DirtySprite):
         # Set box padding.
         padding = (self.padding[0] // 2, self.padding[1] // 2)
 
-        # Draw the new text.
-        self.image.blit(self.textbox.image, padding)
+        if self.portrait:
+            self.portrait.animate(pygame.time.get_ticks())
+            pos = (padding[0] - 10, padding[1])
+            self.image.blit(self.portrait.image, pos)
 
-        # Draw box border.
-        self.style_box(self.corner_sprite, self.image, self.blocks, "CORNER")
-        self.style_box(self.side_sprite, self.image, self.blocks, "SIDE")
+            # Draw the new text.
+            self.image.blit(
+                self.textbox.image,
+                (padding[0] + self.portrait.image.get_width(), padding[1]),
+            )
+        else:
+            self.image.blit(self.textbox.image, padding)
 
         # Draw animated idling symbol.
         if self.textbox.idle and self.idle_symbol:
             self.idle_symbol.animate(pygame.time.get_ticks())
-            pos = (self.size[0] - padding[0], self.size[1] - padding[1])
+            pos = (
+                self.size[0] - padding[0],
+                padding[1] + self.textbox.h - self.textbox.linesize,
+            )
             self.image.blit(self.idle_symbol.image, pos)
+
+        # Draw box border.
+        self.style_box(self.corner_sprite, self.image, self.blocks, "CORNER")
+        self.style_box(self.side_sprite, self.image, self.blocks, "SIDE")
 
         self.dirty = 1
 
@@ -173,8 +214,9 @@ class TextBox(pygame.sprite.DirtySprite):
         else:
             self.offset = self.linesize
 
+        self.indent = 0
         # Text cursor position.
-        self.x, self.y = 0, 0
+        self.x, self.y = self.indent, 0
         # Box dimensions.
         self.w, self.h = (text_width, self.linesize * lines)
 
@@ -222,7 +264,7 @@ class TextBox(pygame.sprite.DirtySprite):
 
         if self.full_box:
             self.image.fill(self.bg_color)
-            self.x, self.y = 0, 0
+            self.x, self.y = self.indent, 0
             self.full_box = False
             self.idle = False
             self.dirty = 1
@@ -234,7 +276,9 @@ class TextBox(pygame.sprite.DirtySprite):
         if self.words and not self.full_box:
 
             word_string = self.split_long_word(self.words.pop(0))
-            word_surface = Text(word_string, color=self.font_color, background=self.bg_color)
+            word_surface = Text(
+                word_string, color=self.font_color, background=self.bg_color
+            )
 
             # Print new words until all lines in the box are filled.
             if self.y < self.h - self.offset:
@@ -247,7 +291,7 @@ class TextBox(pygame.sprite.DirtySprite):
 
                 # Go to next the line.
                 else:
-                    self.x = 0
+                    self.x = self.indent
                     self.y += word_surface.height
                     self.words.insert(0, word_string)
                     self.dirty = 1
