@@ -23,16 +23,7 @@ class TextBoxFrame(pygame.sprite.DirtySprite):
     ):
         super().__init__()
 
-        # Idle box animation.
-        self.idle_symbol = None
-
-        # Background color.
-        self.bg_color = bg_color
-
-        # Space between text and text box border.
-        self.padding = padding
-
-        # Text content.
+        # Initialize text content.
         self.textbox = TextBox(
             text=text,
             text_width=text_width,
@@ -42,9 +33,20 @@ class TextBoxFrame(pygame.sprite.DirtySprite):
             bg_color=bg_color,
             transparent=transparent,
         )
+
+        # Words to print.
         self.words = self.textbox.words
 
-        # Frame style.
+        # Idle box animation.
+        self.idle_symbol = None
+
+        # Background color.
+        self.bg_color = bg_color
+
+        # Space between text and text box border.
+        self.padding = padding
+
+        # Frame sprites.
         self.corner_sprite = load_image(corner, frame_colorkey)
         self.side_sprite = load_image(side, frame_colorkey)
 
@@ -54,9 +56,9 @@ class TextBoxFrame(pygame.sprite.DirtySprite):
             "BOTTOM_LEFT": pygame.transform.rotate(self.corner_sprite, 90),
             "BOTTOM_RIGHT": pygame.transform.rotate(self.corner_sprite, 180),
             "LEFT": self.side_sprite,
-            "RIGHT": pygame.transform.rotate(self.side_sprite, 180),
             "TOP": pygame.transform.rotate(self.side_sprite, -90),
             "BOTTOM": pygame.transform.rotate(self.side_sprite, 90),
+            "RIGHT": pygame.transform.rotate(self.side_sprite, 180),
         }
 
         # Text box size including the frame.
@@ -64,6 +66,8 @@ class TextBoxFrame(pygame.sprite.DirtySprite):
             text_width + padding[0],
             self.textbox.linesize * lines + padding[1],
         )
+
+        # Size of thext box with frame.
         self.size = self.adjust_size(self.size)
 
         self.image = pygame.Surface(self.size).convert()
@@ -146,7 +150,14 @@ class TextBoxFrame(pygame.sprite.DirtySprite):
 
 class TextBox(pygame.sprite.DirtySprite):
     def __init__(
-        self, text, text_width, lines, pos, font_color=(255, 255, 255), bg_color=(0, 0, 0), transparent=True
+        self,
+        text,
+        text_width,
+        lines,
+        pos,
+        font_color=(255, 255, 255),
+        bg_color=(0, 0, 0),
+        transparent=True,
     ):
         super().__init__()
 
