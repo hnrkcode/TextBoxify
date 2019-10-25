@@ -234,7 +234,7 @@ class TextBox(pygame.sprite.DirtySprite):
         if self.words and not self.full_box:
 
             word_string = self.split_long_word(self.words.pop(0))
-            word_surface = Text(word_string, color=self.font_color)
+            word_surface = Text(word_string, color=self.font_color, background=self.bg_color)
 
             # Print new words until all lines in the box are filled.
             if self.y < self.h - self.offset:

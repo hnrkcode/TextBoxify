@@ -20,10 +20,7 @@ class Text(pygame.sprite.DirtySprite):
             print(e, "uses default pygame font instead.")
             self.font = pygame.font.Font(None, size)
 
-        if not background:
-            self.image = self.font.render(text, antialias, color).convert_alpha()
-        else:
-            self.image = self.font.render(text, antialias, color, background).convert()
+        self.image = self.font.render(text, antialias, color, background).convert()
 
         self.rect = self.image.get_rect()
         self.rect.topleft = pos
