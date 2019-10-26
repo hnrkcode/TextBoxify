@@ -1,13 +1,13 @@
 import pygame
 
 
-def load_image(file, colorkey):
+def load_image(file, colorkey=None):
     """Load image file."""
 
     try:
         image = pygame.image.load(file)
     except pygame.error as e:
-        raise SystemExit(e)
+        raise SystemExit(f"load_image: {e}")
 
     if colorkey:
         image.set_colorkey(colorkey)

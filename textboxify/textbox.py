@@ -15,6 +15,8 @@ class TextBoxFrame(pygame.sprite.DirtySprite):
         pos,
         padding=(50, 50),
         font_color=(255, 255, 255),
+        font_type=None,
+        font_size=35,
         bg_color=(0, 0, 0),
         corner=None,
         side=None,
@@ -31,6 +33,8 @@ class TextBoxFrame(pygame.sprite.DirtySprite):
             text_width=text_width,
             lines=lines,
             pos=pos,
+            font_type=font_type,
+            font_size=font_size,
             font_color=font_color,
             bg_color=bg_color,
             transparent=transparent,
@@ -196,17 +200,21 @@ class TextBox(pygame.sprite.DirtySprite):
         text_width,
         lines,
         pos,
+        font_type=None,
+        font_size=35,
         font_color=(255, 255, 255),
         bg_color=(0, 0, 0),
         transparent=True,
     ):
         super().__init__()
 
+        self.font_type = font_type
+        self.font_size = font_size
         self.font_color = font_color
         self.bg_color = bg_color
         self.full_box = False
         self.words = self.convert_text(text)
-        self.linesize = Text(self.words[0]).linesize
+        self.linesize = Text(self.words[0], font=font_type, size=font_size).linesize
 
         # Offset have to be set to zero to be able to print one liners.
         if lines == 1:
@@ -230,7 +238,7 @@ class TextBox(pygame.sprite.DirtySprite):
         self.rect.topleft = pos
 
         # Find the widest character.
-        chars = {char: Text(char).width for char in string.printable}
+        chars = {char: Text(char, font=font_type, size=font_size).width for char in string.printable}
         self.widest_char = chars[max(chars, key=chars.get)]
 
         # Calculate how many character that can fit on one line.
@@ -277,7 +285,7 @@ class TextBox(pygame.sprite.DirtySprite):
 
             word_string = self.split_long_word(self.words.pop(0))
             word_surface = Text(
-                word_string, color=self.font_color, background=self.bg_color
+                word_string, font=self.font_type, size=self.font_size, color=self.font_color, background=self.bg_color
             )
 
             # Print new words until all lines in the box are filled.
