@@ -86,10 +86,10 @@ class TextBoxFrame(pygame.sprite.DirtySprite):
         self.rect = self.image.get_rect()
         self.rect.topleft = pos
 
-    def set_idle_animation(self, sprite, size, colorkey=None):
+    def set_idle_animation(self, sprite, size, colorkey=None, scale=None):
         """Initilize animated idle symbol."""
 
-        self.idle_symbol = IdleBoxSymbol(sprite, size, colorkey)
+        self.idle_symbol = IdleBoxSymbol(sprite, size, colorkey, scale)
 
     def set_portrait(self, sprite, size, colorkey=None):
         """Initilize picture of the character in the box."""
@@ -182,7 +182,7 @@ class TextBoxFrame(pygame.sprite.DirtySprite):
             self.idle_symbol.animate(pygame.time.get_ticks())
             pos = (
                 self.size[0] - padding[0],
-                padding[1] + self.textbox.h - self.textbox.linesize,
+                self.textbox.linesize * self.lines + padding[1] - self.idle_symbol.image.get_height()
             )
             self.image.blit(self.idle_symbol.image, pos)
 

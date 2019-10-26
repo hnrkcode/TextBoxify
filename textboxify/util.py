@@ -68,9 +68,14 @@ class AnimateSprite(pygame.sprite.DirtySprite):
 class IdleBoxSymbol(AnimateSprite):
     """Implement symbol that indicate box is idle."""
 
-    def __init__(self, file, size, colorkey=None):
+    def __init__(self, file, size, colorkey=None, scale=None):
         super().__init__()
         self._images = sprite_slice(file, size, colorkey)
+
+        if scale:
+            for i in range(len(self._images)):
+                self._images[i] = pygame.transform.scale(self._images[i], scale)
+
         self.image = self._images[0]
         self.rect = self.image.get_rect()
 
