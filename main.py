@@ -23,49 +23,42 @@ def main():
     boxes = [
         TextBoxFrame(
             message,
-            text_width=550,
+            text_width=350,
             lines=4,
             pos=(10, 10),
+            font_size=25,
             padding=(175, 100),
             bg_color=(23, 23, 23),
             corner="assets/border/corner_white.png",
             side="assets/border/side_white.png",
         ),
         TextBoxFrame(
-            message,
-            text_width=550,
+            text=message,
+            text_width=500,
             lines=3,
             pos=(10, 300),
-            padding=(100, 50),
-            bg_color=(117, 80, 123),
-            font_color=(233, 140, 228),
-            corner="assets/border/pink_corner.png",
-            side="assets/border/pink_side.png",
-            frame_colorkey=(255, 255, 255),
+            padding=(100, 70),
+            font_color=(255, 255, 255),
+            font_name=None,
+            font_size=20,
+            bg_color=(100, 50, 0),
+            corner="assets/border/corner_white.png",
+            side="assets/border/side_white.png",
+            border_colorkey=None,
+            transparent=True,
         ),
         TextBox(
-            message,
-            text_width=800,
-            lines=1,
-            pos=(10, 450),
-            bg_color=(123, 23, 23),
-            transparent=False,
-        ),
-        TextBox(
-            message,
-            text_width=WIDTH,
-            lines=6,
-            pos=(0, 500),
-            bg_color=(223, 23, 23),
-            font_color=(1, 41, 41),
-            transparent=False,
+            text=message, text_width=300, lines=3, pos=(10, 400), transparent=False
         ),
     ]
 
-    boxes[0].set_idle_animation("assets/idle/arrow.png", (25, 25), (0, 0, 0))
+    boxes[0].set_indicator("assets/idle/arrow2.png", (25, 17), (0, 0, 0))
     boxes[0].set_portrait("assets/character1.png", (66, 66), (0, 0, 0))
 
-    box_group = pygame.sprite.LayeredDirty(boxes)
+    boxes[1].set_indicator("assets/idle/arrow2.png", (25, 17), (0, 0, 0), (31, 7))
+    boxes[1].set_portrait("assets/character1.png", (66, 66), (0, 0, 0))
+
+    box_group = pygame.sprite.LayeredDirty()
     box_group.clear(screen, background)
 
     while True:
@@ -78,6 +71,11 @@ def main():
                 # Exit game when ESC is pressed.
                 if event.key == locals.K_ESCAPE:
                     raise SystemExit()
+                # Activate textbox.
+                if event.key == locals.K_s:
+                    if not box_group and boxes:
+                        box_group.add(boxes)
+
                 if event.key == locals.K_RETURN:
                     for box in box_group.sprites():
                         if box.words:
@@ -85,9 +83,13 @@ def main():
                         else:
                             box.kill()
 
-        box_group.update()
-        rects = box_group.draw(screen)
-        pygame.display.update(rects)
+        if box_group:
+            box_group.update()
+            rects = box_group.draw(screen)
+            pygame.display.update(rects)
+        else:
+            box_group.draw(screen)
+            pygame.display.update()
 
 
 if __name__ == "__main__":

@@ -15,13 +15,13 @@ class Text(pygame.sprite.DirtySprite):
         super().__init__()
 
         try:
-            self.font = pygame.font.Font(font, size)
+            self._font = pygame.font.Font(font, size)
         except FileNotFoundError as e:
             print(e, "uses default pygame font instead.")
-            self.font = pygame.font.Font(None, size)
+            self._font = pygame.font.Font(None, size)
 
-        self.image = self.font.render(text, antialias, color, background).convert()
-
+        self.image = self._font.render(text, antialias, color, background)
+        self.image = self.image.convert()
         self.rect = self.image.get_rect()
         self.rect.topleft = pos
 
@@ -38,7 +38,7 @@ class Text(pygame.sprite.DirtySprite):
     @property
     def linesize(self):
         """Return linesize for text with this font."""
-        return self.font.get_linesize()
+        return self._font.get_linesize()
 
     @property
     def size(self):

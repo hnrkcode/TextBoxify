@@ -35,6 +35,7 @@ def sprite_slice(file, size, colorkey=None, scale=None):
         else:
             frame = master_image.subsurface((left, 0, frame_width, frame_height))
             frame = pygame.transform.scale(frame, scale)
+
         frames.append(frame)
 
     return frames
@@ -43,12 +44,12 @@ def sprite_slice(file, size, colorkey=None, scale=None):
 class AnimateSprite(pygame.sprite.DirtySprite):
     """Implement animated sprites."""
 
-    def __init__(self):
+    def __init__(self, fps, delay):
         super().__init__()
 
         self._images = None
-        self._fps = 15
-        self._delay = 1500 / self._fps
+        self._fps = fps
+        self._delay = delay / self._fps
         self._last_update = 0
         self._frame = 0
 
@@ -65,32 +66,21 @@ class AnimateSprite(pygame.sprite.DirtySprite):
             self._last_update = t
 
 
-class IdleBoxSymbol(AnimateSprite):
-    """Implement symbol that indicate box is idle."""
+class CustomSprite(AnimateSprite):
+    def __init__(self, file, size, colorkey=None, scale=None, fps=15, delay=1500):
+        super().__init__(fps, delay)
 
-    def __init__(self, file, size, colorkey=None, scale=None):
-        super().__init__()
-        self._images = sprite_slice(file, size, colorkey)
-
-        if scale:
-            for i in range(len(self._images)):
-                self._images[i] = pygame.transform.scale(self._images[i], scale)
-
+        self._images = sprite_slice(file, size, colorkey, scale)
         self.image = self._images[0]
         self.rect = self.image.get_rect()
 
-    def update(self):
-        self.dirty = 1
+    @property
+    def width(self):
+        return self.rect.width
 
-
-class CharacterPortrait(AnimateSprite):
-    """Implement symbol that indicate box is idle."""
-
-    def __init__(self, file, size, colorkey=None, scale=None):
-        super().__init__()
-        self._images = sprite_slice(file, size, colorkey, scale=scale)
-        self.image = self._images[0]
-        self.rect = self.image.get_rect()
+    @property
+    def height(self):
+        return self.rect.height
 
     def update(self):
         self.dirty = 1
