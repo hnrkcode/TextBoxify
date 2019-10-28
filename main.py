@@ -1,9 +1,7 @@
 import pygame
 from pygame import locals
 
-from textboxify.text import Text
 from textboxify.textbox import TextBox, TextBoxFrame
-from textboxify.util import sprite_slice
 
 WIDTH, HEIGHT = 1280, 720
 

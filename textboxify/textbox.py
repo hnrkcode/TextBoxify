@@ -2,8 +2,7 @@ import string
 
 import pygame
 
-from .text import Text
-from .util import CustomSprite, load_image
+from .util import CustomSprite, Text, load_image
 
 
 class TextBoxFrame(pygame.sprite.DirtySprite):
