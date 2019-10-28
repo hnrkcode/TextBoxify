@@ -81,6 +81,8 @@ def main():
                         if box.words:
                             box.reset()
                         else:
+                            box.hard_reset()
+                            box.set_text(message)
                             box.kill()
 
         if box_group:

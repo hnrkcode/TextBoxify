@@ -103,12 +103,22 @@ class TextBoxFrame(pygame.sprite.DirtySprite):
         self.rect = self.image.get_rect()
         self.rect.topleft = pos
 
+    def set_text(self, text):
+        """Set new text message to print out."""
+
+        self.__textbox.set_text(text)
+
     def reset(self):
         """Reset the filled box and continue with the remaining words."""
 
         if self.__textbox.full:
             self.__textbox.reset()
             self._draw_border()
+
+    def hard_reset(self):
+        """Reset box to default values when whole message has been printed."""
+
+        self.__textbox.hard_reset()
 
     def update(self):
         """Update the text box."""
@@ -211,6 +221,8 @@ class TextBox(pygame.sprite.DirtySprite):
         self.__font_size = font_size
         self.__font_color = font_color
         self.__bg_color = bg_color
+        self.__transparent = transparent
+        self.__pos = pos
 
         # Offset have to be set to zero to be able to print one liners.
         self.__offset = 0 if lines == 1 else self.linesize
@@ -236,6 +248,25 @@ class TextBox(pygame.sprite.DirtySprite):
         if transparent:
             self.image.set_colorkey(bg_color)
 
+    def set_text(self, text):
+        """Set new text message to print out."""
+
+        self.words = self._to_list(text)
+
+    def hard_reset(self):
+        """Reset box to default values when whole message has been printed."""
+
+        self.__x, self.__y = 0, 0
+        self.full = False
+        self.idle = False
+        self.image = pygame.Surface((self.__w, self.__h)).convert()
+        self.image.fill(self.__bg_color)
+        self.rect = self.image.get_rect()
+        self.rect.topleft = self.__pos
+
+        if self.__transparent:
+            self.image.set_colorkey(self.__bg_color)
+
     def reset(self):
         """Reset the filled box and continue with the remaining words."""
 
@@ -244,7 +275,6 @@ class TextBox(pygame.sprite.DirtySprite):
             self.__x, self.__y = 0, 0
             self.full = False
             self.idle = False
-            self.dirty = 1
 
     def update(self):
         """Update the text box."""
