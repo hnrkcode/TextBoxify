@@ -5,4 +5,5 @@ in games created with Pygame. The boxes can be simple text or
 more elaborated boxes with animations and borders, because the
 package offers the ability to easily customize the boxes."""
 
+from .text import Text
 from .textbox import TextBox, TextBoxFrame

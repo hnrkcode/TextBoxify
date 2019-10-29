@@ -2,7 +2,9 @@ import string
 
 import pygame
 
-from .util import CustomSprite, Text, load_image
+from . import settings
+from .text import Text
+from .util import CustomSprite, load_image
 
 
 class TextBoxFrame(pygame.sprite.DirtySprite):
@@ -45,8 +47,14 @@ class TextBoxFrame(pygame.sprite.DirtySprite):
         self.__portrait = None
 
         # Sprites of topleft and left corner that will be rotated and reused.
-        self.__corner = load_image(corner, border_colorkey)
-        self.__side = load_image(side, border_colorkey)
+        if corner and side:
+            self.__corner = load_image(corner, border_colorkey)
+            self.__side = load_image(side, border_colorkey)
+        # Use default border sprites.
+        else:
+            self.__corner = load_image(settings.DEFAULT_CORNER)
+            self.__side = load_image(settings.DEFAULT_SIDE)
+
         self.__blocks = {
             "TOP_LEFT": self.__corner,
             "TOP_RIGHT": pygame.transform.rotate(self.__corner, -90),
@@ -76,18 +84,25 @@ class TextBoxFrame(pygame.sprite.DirtySprite):
     def words(self, words):
         self.__words = words
 
-    def set_indicator(self, sprite, size, colorkey=None, scale=None):
+    def set_indicator(self, sprite=None, size=None, colorkey=None, scale=None):
         """Initilize animated idle symbol."""
 
-        self.__indicator = CustomSprite(sprite, size, colorkey, scale)
+        if sprite:
+            self.__indicator = CustomSprite(sprite, size, colorkey, scale)
+        else:
+            self.__indicator = CustomSprite(settings.DEFAULT_INDICATOR, (25, 17), (0, 0, 0), scale)
 
-    def set_portrait(self, sprite, size, colorkey=None):
+    def set_portrait(self, sprite=None, size=None, colorkey=None):
         """Initilize picture of the character in the box."""
 
         # Portrait should have the same height as the text lines.
         text_height = self.__textbox.linesize * self.__lines
         scale = (text_height, text_height)
-        self.__portrait = CustomSprite(sprite, size, colorkey, scale)
+
+        if sprite:
+            self.__portrait = CustomSprite(sprite, size, colorkey, scale)
+        else:
+            self.__portrait = CustomSprite(settings.DEFAULT_PORTRAIT, (50, 50), (241, 0, 217))
 
         # Adjust box text to the portrait.
         w = self.__portrait.width + self.__text_width + self.__padding[0]
