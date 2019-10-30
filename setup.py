@@ -9,7 +9,7 @@ def read(filename):
 
 setuptools.setup(
     name="textboxify",
-    version="0.1.1",
+    version="0.1.2",
     author="Henrik Petersson",
     author_email="henrik@tutamail.com",
     url="https://github.com/hnrkcode/TextBoxify",

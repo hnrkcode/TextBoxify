@@ -19,9 +19,17 @@ It's recommended to install the package in a virtual environment to avoid confli
 
   `source [dir]/bin/activate`
 
-3. Install package:
+3. Installation:
 
-  `pip install .` or `pip install -e .` to install a project in editable mode.
+  `pip install textboxify`
+
+  To install the code from Github, clone the repository and install it in editable mode `-e` to edit the code without having to reinstall it for the changes to have effect.
+
+  ```
+  git clone https://github.com/hnrkcode/TextBoxify.git
+  cd TextBoxify
+  pip install -r requirements.txt -e .
+  ```
 
 ## Usage
 
