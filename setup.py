@@ -9,13 +9,14 @@ def read(filename):
 
 setuptools.setup(
     name="textboxify",
-    version="0.1.0",
+    version="0.1.1",
     author="Henrik Petersson",
     author_email="henrik@tutamail.com",
     url="https://github.com/hnrkcode/TextBoxify",
     description="Pygame package to easily create dialog boxes for games.",
     long_description=read("README.md"),
     long_description_content_type="text/markdown",
+    install_requires=["pygame"],
     packages=setuptools.find_packages(),
     package_data={
         "textboxify": [
