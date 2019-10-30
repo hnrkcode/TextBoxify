@@ -1,5 +1,12 @@
 import setuptools
 
+
+def read(filename):
+    """Return file content."""
+    with open(filename, "r") as f:
+        return f.read()
+
+
 setuptools.setup(
     name="textboxify",
     version="0.1.0",
@@ -7,6 +14,7 @@ setuptools.setup(
     author_email="henrik@tutamail.com",
     url="https://github.com/hnrkcode/TextBoxify",
     description="Pygame package to easily create dialog boxes for games.",
+    long_description=read("README.md"),
     packages=setuptools.find_packages(),
     package_data={
         "textboxify": [
