@@ -1,7 +1,7 @@
 import setuptools
 
 setuptools.setup(
-    name="TextBoxify",
+    name="textboxify",
     version="0.1.0",
     author="Henrik Petersson",
     author_email="henrik@tutamail.com",
