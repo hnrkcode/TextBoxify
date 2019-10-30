@@ -10,10 +10,10 @@ from .util import CustomSprite, load_image
 class TextBoxFrame(pygame.sprite.DirtySprite):
     def __init__(
         self,
-        text,
         text_width,
-        lines,
         pos,
+        lines=1,
+        text=None,
         padding=(50, 50),
         font_color=(255, 255, 255),
         font_name=None,
@@ -22,7 +22,7 @@ class TextBoxFrame(pygame.sprite.DirtySprite):
         corner=None,
         side=None,
         border_colorkey=None,
-        transparent=True,
+        transparent=False,
     ):
         super().__init__()
 
@@ -212,23 +212,28 @@ class TextBoxFrame(pygame.sprite.DirtySprite):
 class TextBox(pygame.sprite.DirtySprite):
     def __init__(
         self,
-        text,
         text_width,
-        lines,
         pos,
+        text=None,
+        lines=1,
         font_name=None,
         font_size=35,
         font_color=(255, 255, 255),
         bg_color=(0, 0, 0),
-        transparent=True,
+        transparent=False,
     ):
         super().__init__()
 
         self.full = False
         self.idle = False
-        self.words = self._to_list(text)
+
+        if text:
+            self.words = self._to_list(text)
+        else:
+            self.words = ""
+
         self.linesize = Text(
-            text=self.words[0], font=font_name, size=font_size
+            text=" ", font=font_name, size=font_size
         ).linesize
 
         self.__font_name = font_name
