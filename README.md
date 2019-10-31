@@ -82,3 +82,17 @@ dialog_box.set_text("Happy coding!")
 ```
 
 For a working example of how to implement `textboxify` see the example module.
+
+## Tests
+
+Run all tests:
+
+`python -m unittest discover -v tests` or `python -m unittest -v tests/test_*.py`
+
+Run specific tests:
+
+`python -m unittest -v tests.test_settings`
+
+`python -m unittest -v tests.test_settings.TestSettings`
+
+`python -m unittest -v tests.test_settings.TestSettings.test_file_exists`
