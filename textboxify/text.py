@@ -15,7 +15,10 @@ class Text(pygame.sprite.DirtySprite):
         super().__init__()
 
         try:
-            self._font = pygame.font.Font(font, size)
+            try:
+                self._font = pygame.font.Font(font, size)
+            except FileNotFoundError:
+                self._font = pygame.font.SysFont(font, size)
         except FileNotFoundError as e:
             print(e, "uses default pygame font instead.")
             self._font = pygame.font.Font(None, size)
