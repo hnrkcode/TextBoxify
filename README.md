@@ -5,6 +5,8 @@
 [![made-with-pygame](https://img.shields.io/badge/Made%20with-Pygame-green.svg)](https://www.pygame.org/)
 [![Generic badge](https://img.shields.io/badge/code_style-black-black.svg)](https://github.com/psf/black)
 
+![dialog box](example.gif)
+
 TextBoxify is a package for easily creating text and dialog boxes in Python games written in [Pygame](https://www.pygame.org/). The package is aiming to give the users of the package a lot of control when it comes to designing the look and feel of their boxes.
 
 ## Setup
