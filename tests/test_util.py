@@ -31,33 +31,33 @@ class TestLoadImage(unittest.TestCase):
 
     def test_load_image_set_colorkey(self):
         colorkey = (0, 0, 0)
-        test = util.load_image(settings.DEFAULT_PORTRAIT, colorkey)
+        test = util.load_image(settings.DEFAULT_PORTRAIT["file"], colorkey)
         self.assertTupleEqual(test.get_colorkey(), (0, 0, 0, 255))
 
     def test_load_image_colorkey_none(self):
-        test = util.load_image(settings.DEFAULT_PORTRAIT)
+        test = util.load_image(settings.DEFAULT_PORTRAIT["file"])
         self.assertEqual(test.get_colorkey(), None)
 
 
 class TestSpriteSlice(unittest.TestCase):
 
     def setUp(self):
-        self.w, self.h = util.load_image(settings.DEFAULT_PORTRAIT).get_size()
+        self.w, self.h = util.load_image(settings.DEFAULT_PORTRAIT["file"]).get_size()
 
     def test_number_slices_from_image(self):
-        frames = len(util.sprite_slice(settings.DEFAULT_PORTRAIT, (50, 50)))
+        frames = len(util.sprite_slice(settings.DEFAULT_PORTRAIT["file"], (50, 50)))
         self.assertEqual(frames, self.w // 50)
 
     def test_scale_size_with_ints(self):
         scale = (100, 100)
-        frames = util.sprite_slice(settings.DEFAULT_PORTRAIT, (50, 50), scale=scale)
+        frames = util.sprite_slice(settings.DEFAULT_PORTRAIT["file"], (50, 50), scale=scale)
 
         for frame in frames:
             self.assertTupleEqual(frame.get_size(), scale)
 
     def test_scale_size_with_floats(self):
         scale = (13.6, 10.6)
-        frames = util.sprite_slice(settings.DEFAULT_PORTRAIT, (50, 50), scale=scale)
+        frames = util.sprite_slice(settings.DEFAULT_PORTRAIT["file"], (50, 50), scale=scale)
 
         for frame in frames:
             size = int(scale[0]), int(scale[1])
@@ -107,7 +107,7 @@ class TestCustomSprite(unittest.TestCase):
 
     def setUp(self):
         self.w, self.h = (50, 50)
-        self.sprite = util.CustomSprite(settings.DEFAULT_PORTRAIT, (self.w, self.h), delay=0.001)
+        self.sprite = util.CustomSprite(settings.DEFAULT_PORTRAIT["file"], (self.w, self.h), delay=0.001)
 
     def test_that_animate_loop_frames(self):
 

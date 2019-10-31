@@ -90,14 +90,13 @@ class TextBoxFrame(pygame.sprite.DirtySprite):
         if sprite:
             self.__indicator = CustomSprite(sprite, size, colorkey, scale)
         else:
-            self.__indicator = CustomSprite(settings.DEFAULT_INDICATOR, (25, 17), (0, 0, 0), scale)
+            self.__indicator = CustomSprite(settings.DEFAULT_INDICATOR["file"], settings.DEFAULT_INDICATOR["size"], (0, 0, 0))
 
     def set_portrait(self, sprite=None, size=None, colorkey=None):
         """Initilize picture of the character in the box."""
 
-        # Portrait should have the same height as the text lines.
-        text_height = self.__textbox.linesize * self.__lines
-        scale = (text_height, text_height)
+        # Set portrait to have the same height as the text lines.
+        scale = [self.__textbox.linesize * self.__lines] * 2
 
         # Set custom sprite for portrait.
         if sprite:
@@ -106,11 +105,21 @@ class TextBoxFrame(pygame.sprite.DirtySprite):
             if not size:
                 raise SystemExit("Error: Need to give a size for the portrait sprite.")
 
-            self.__portrait = CustomSprite(sprite, size, colorkey, scale)
+            self.__portrait = CustomSprite(
+                file=sprite,
+                size=size,
+                colorkey=colorkey,
+                scale=scale,
+            )
 
         # Use default portrait sprite.
         else:
-            self.__portrait = CustomSprite(settings.DEFAULT_PORTRAIT, (50, 50), (241, 0, 217))
+            self.__portrait = CustomSprite(
+                file=settings.DEFAULT_PORTRAIT["file"],
+                size=settings.DEFAULT_PORTRAIT["size"],
+                colorkey=(241, 0, 217),
+                scale=scale,
+            )
 
         # Adjust box text to the portrait.
         w = self.__portrait.width + self.__text_width + self.__padding[0]

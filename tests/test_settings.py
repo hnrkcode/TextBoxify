@@ -9,8 +9,8 @@ class TestSettings(unittest.TestCase):
     def test_file_exists(self):
         self.assertTrue(os.path.isfile(settings.DEFAULT_CORNER))
         self.assertTrue(os.path.isfile(settings.DEFAULT_SIDE))
-        self.assertTrue(os.path.isfile(settings.DEFAULT_INDICATOR))
-        self.assertTrue(os.path.isfile(settings.DEFAULT_PORTRAIT))
+        self.assertTrue(os.path.isfile(settings.DEFAULT_INDICATOR["file"]))
+        self.assertTrue(os.path.isfile(settings.DEFAULT_PORTRAIT["file"]))
 
     def test_path_exists(self):
         self.assertTrue(os.path.exists(settings.BASE_DIR))
@@ -20,8 +20,8 @@ class TestSettings(unittest.TestCase):
         self.assertTrue(os.path.exists(settings.PORTRAIT_DIR))
         self.assertTrue(os.path.exists(settings.DEFAULT_CORNER))
         self.assertTrue(os.path.exists(settings.DEFAULT_SIDE))
-        self.assertTrue(os.path.exists(settings.DEFAULT_INDICATOR))
-        self.assertTrue(os.path.exists(settings.DEFAULT_PORTRAIT))
+        self.assertTrue(os.path.exists(settings.DEFAULT_INDICATOR["file"]))
+        self.assertTrue(os.path.exists(settings.DEFAULT_PORTRAIT["file"]))
 
     def test_dir_names(self):
         self.assertEqual(os.path.basename(settings.BASE_DIR), "textboxify")
@@ -39,11 +39,11 @@ class TestSettings(unittest.TestCase):
     def test_file_names(self):
         self.assertEqual(os.path.basename(settings.DEFAULT_CORNER), "corner.png")
         self.assertEqual(os.path.basename(settings.DEFAULT_SIDE), "side.png")
-        self.assertEqual(os.path.basename(settings.DEFAULT_INDICATOR), "idle.png")
-        self.assertEqual(os.path.basename(settings.DEFAULT_PORTRAIT), "placeholder.png")
+        self.assertEqual(os.path.basename(settings.DEFAULT_INDICATOR["file"]), "idle.png")
+        self.assertEqual(os.path.basename(settings.DEFAULT_PORTRAIT["file"]), "placeholder.png")
 
     def test_file_paths(self):
         self.assertListEqual(settings.DEFAULT_CORNER.split("/")[-3:], ['border', 'default', 'corner.png'])
         self.assertListEqual(settings.DEFAULT_SIDE.split("/")[-3:], ['border', 'default', 'side.png'])
-        self.assertListEqual(settings.DEFAULT_INDICATOR.split("/")[-2:], ['indicator', 'idle.png'])
-        self.assertListEqual(settings.DEFAULT_PORTRAIT.split("/")[-2:], ['portrait', 'placeholder.png'])
+        self.assertListEqual(settings.DEFAULT_INDICATOR["file"].split("/")[-2:], ['indicator', 'idle.png'])
+        self.assertListEqual(settings.DEFAULT_PORTRAIT["file"].split("/")[-2:], ['portrait', 'placeholder.png'])
