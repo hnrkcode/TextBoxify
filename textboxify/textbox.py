@@ -99,8 +99,16 @@ class TextBoxFrame(pygame.sprite.DirtySprite):
         text_height = self.__textbox.linesize * self.__lines
         scale = (text_height, text_height)
 
+        # Set custom sprite for portrait.
         if sprite:
+
+            # Shut down if no size.
+            if not size:
+                raise SystemExit("Error: Need to give a size for the portrait sprite.")
+
             self.__portrait = CustomSprite(sprite, size, colorkey, scale)
+
+        # Use default portrait sprite.
         else:
             self.__portrait = CustomSprite(settings.DEFAULT_PORTRAIT, (50, 50), (241, 0, 217))
 
