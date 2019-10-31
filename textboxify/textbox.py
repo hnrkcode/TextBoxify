@@ -4,7 +4,7 @@ import pygame
 
 from . import settings
 from .text import Text
-from .util import CustomSprite, load_image
+from .util import CustomSprite, load_image, fix_corners
 
 
 class TextBoxFrame(pygame.sprite.DirtySprite):
@@ -45,6 +45,7 @@ class TextBoxFrame(pygame.sprite.DirtySprite):
         self.__padding = padding
         self.__indicator = None
         self.__portrait = None
+        self.__border_colorkey = border_colorkey
 
         # Sprites of topleft and left corner that will be rotated and reused.
         if corner and side:
@@ -222,8 +223,18 @@ class TextBoxFrame(pygame.sprite.DirtySprite):
                 dest.blit(blocks["BOTTOM"], (0 + src_w * block, dest_h - src_h))
 
     def _draw_border(self):
+        """Draws the border and then fixes the corners if needed."""
+
         self._blit_border(self.__corner, self.image, self.__blocks, "CORNER")
         self._blit_border(self.__side, self.image, self.__blocks, "SIDE")
+
+        # Make pixels outside rounded corners transparent.
+        fix_corners(
+            surface=self.image,
+            corner_size=self.__corner.get_size(),
+            bg_color=self.__bg_color,
+            colorkey=self.__border_colorkey
+        )
 
 
 class TextBox(pygame.sprite.DirtySprite):

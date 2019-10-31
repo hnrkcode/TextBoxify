@@ -1,6 +1,50 @@
 import pygame
 
 
+def fix_corners(surface, corner_size, bg_color, colorkey):
+    """Remove pixels outside rounded corners."""
+
+    pixels = []
+    bg_color = (*bg_color, 255)
+    w, h = corner_size
+
+    # Upper left corner.
+    for y in range(h):
+        for x in range(w):
+            if surface.get_at((x, y)) == bg_color:
+                pixels.append((x, y))
+                continue
+            break
+
+    # Bottom left corner.
+    for y in range(surface.get_height() - h, surface.get_height()):
+        for x in range(w):
+            if surface.get_at((x, y)) == bg_color:
+                pixels.append((x, y))
+                continue
+            break
+
+    # Upper right corner.
+    for y in range(h):
+        for x in reversed(range(surface.get_width() - w, surface.get_width())):
+            if surface.get_at((x, y)) == bg_color:
+                pixels.append((x, y))
+                continue
+            break
+
+    # Bottom right corner.
+    for y in range(surface.get_height() - h, surface.get_height()):
+        for x in reversed(range(surface.get_width() - w, surface.get_width())):
+            if surface.get_at((x, y)) == bg_color:
+                pixels.append((x, y))
+                continue
+            break
+
+    for pixel in pixels:
+        surface.set_at(pixel, colorkey)
+
+    surface.set_colorkey(colorkey)
+
 def load_image(file, colorkey=None):
     """Load image file."""
 
