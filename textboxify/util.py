@@ -33,6 +33,7 @@ def sprite_slice(file, size, colorkey=None, scale=None):
         if not scale:
             frame = master_image.subsurface((left, 0, frame_width, frame_height))
         else:
+            scale = int(scale[0]), int(scale[1])
             frame = master_image.subsurface((left, 0, frame_width, frame_height))
             frame = pygame.transform.scale(frame, scale)
 
