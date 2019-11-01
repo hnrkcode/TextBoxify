@@ -19,9 +19,7 @@ class TextBoxFrame(pygame.sprite.DirtySprite):
         font_name=None,
         font_size=35,
         bg_color=(0, 0, 0),
-        corner=None,
-        side=None,
-        border_colorkey=None,
+        border=None,
         transparent=False,
     ):
         super().__init__()
@@ -45,26 +43,26 @@ class TextBoxFrame(pygame.sprite.DirtySprite):
         self.__padding = padding
         self.__indicator = None
         self.__portrait = None
-        self.__border_colorkey = border_colorkey
+        self.__border = border if border else settings.DEFAULT_BORDER
 
         # Sprites of topleft and left corner that will be rotated and reused.
-        if corner and side:
-            self.__corner = load_image(corner, border_colorkey)
-            self.__side = load_image(side, border_colorkey)
+        if border:
+            self.__corner = CustomSprite(self.__border["corner"], self.__border["size"], self.__border["colorkey"])
+            self.__side = CustomSprite(self.__border["side"], self.__border["size"], self.__border["colorkey"])
         # Use default border sprites.
         else:
-            self.__corner = load_image(settings.DEFAULT_CORNER)
-            self.__side = load_image(settings.DEFAULT_SIDE)
+            self.__corner = CustomSprite(self.__border["corner"], self.__border["size"], self.__border["colorkey"])
+            self.__side = CustomSprite(self.__border["side"], self.__border["size"], self.__border["colorkey"])
 
         self.__blocks = {
-            "TOP_LEFT": self.__corner,
-            "TOP_RIGHT": pygame.transform.rotate(self.__corner, -90),
-            "BOTTOM_LEFT": pygame.transform.rotate(self.__corner, 90),
-            "BOTTOM_RIGHT": pygame.transform.rotate(self.__corner, 180),
-            "LEFT": self.__side,
-            "TOP": pygame.transform.rotate(self.__side, -90),
-            "BOTTOM": pygame.transform.rotate(self.__side, 90),
-            "RIGHT": pygame.transform.rotate(self.__side, 180),
+            "TOP_LEFT": self.__corner.image,
+            "TOP_RIGHT": pygame.transform.rotate(self.__corner.image, -90),
+            "BOTTOM_LEFT": pygame.transform.rotate(self.__corner.image, 90),
+            "BOTTOM_RIGHT": pygame.transform.rotate(self.__corner.image, 180),
+            "LEFT": self.__side.image,
+            "TOP": pygame.transform.rotate(self.__side.image, -90),
+            "BOTTOM": pygame.transform.rotate(self.__side.image, 90),
+            "RIGHT": pygame.transform.rotate(self.__side.image, 180),
         }
 
         # Text box size including the frame.
@@ -194,8 +192,8 @@ class TextBoxFrame(pygame.sprite.DirtySprite):
     def _adjust(self, size):
         """Adjust the box size after the box border sprites."""
 
-        w = size[0] - size[0] % self.__side.get_width()
-        h = size[1] - size[1] % self.__side.get_height()
+        w = size[0] - size[0] % self.__side.image.get_width()
+        h = size[1] - size[1] % self.__side.image.get_height()
 
         return (w, h)
 
@@ -225,17 +223,37 @@ class TextBoxFrame(pygame.sprite.DirtySprite):
     def _draw_border(self):
         """Draws the border and then fixes the corners if needed."""
 
-        self._blit_border(self.__corner, self.image, self.__blocks, "CORNER")
-        self._blit_border(self.__side, self.image, self.__blocks, "SIDE")
+        # Animation is turned on.
+        if self.__border["animate"]:
+            self.__corner.animate(pygame.time.get_ticks())
+            self.__side.animate(pygame.time.get_ticks())
+
+            self.__blocks = {
+                "TOP_LEFT": self.__corner.image,
+                "TOP_RIGHT": pygame.transform.rotate(self.__corner.image, -90),
+                "BOTTOM_LEFT": pygame.transform.rotate(self.__corner.image, 90),
+                "BOTTOM_RIGHT": pygame.transform.rotate(self.__corner.image, 180),
+                "LEFT": self.__side.image,
+                "TOP": pygame.transform.rotate(self.__side.image, -90),
+                "BOTTOM": pygame.transform.rotate(self.__side.image, 90),
+                "RIGHT": pygame.transform.rotate(self.__side.image, 180),
+            }
+
+            self._blit_border(self.__corner.image, self.image, self.__blocks, "CORNER")
+            self._blit_border(self.__side.image, self.image, self.__blocks, "SIDE")
+
+        # Border is not going to have animation.
+        else:
+            self._blit_border(self.__corner.image, self.image, self.__blocks, "CORNER")
+            self._blit_border(self.__side.image, self.image, self.__blocks, "SIDE")
 
         # Make pixels outside rounded corners transparent.
         fix_corners(
             surface=self.image,
-            corner_size=self.__corner.get_size(),
+            corner_size=self.__corner.image.get_size(),
             bg_color=self.__bg_color,
-            colorkey=self.__border_colorkey
+            colorkey=self.__border["colorkey"]
         )
-
 
 class TextBox(pygame.sprite.DirtySprite):
     def __init__(

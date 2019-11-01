@@ -8,8 +8,13 @@ INDICATOR_DIR = os.path.join(DATA_DIR, "indicator")
 PORTRAIT_DIR = os.path.join(DATA_DIR, "portrait")
 
 # Default sprite files.
-DEFAULT_CORNER = os.path.join(BORDER_DIR, "default", "corner.png")
-DEFAULT_SIDE = os.path.join(BORDER_DIR, "default", "side.png")
+DEFAULT_BORDER = {
+    "corner": os.path.join(BORDER_DIR, "default", "corner.png"),
+    "side": os.path.join(BORDER_DIR, "default", "side.png"),
+    "size": [10, 10],
+    "colorkey": None,
+    "animate": False,
+}
 DEFAULT_INDICATOR = {
     "file": os.path.join(INDICATOR_DIR, "idle.png"),
     "size": (25, 17),
