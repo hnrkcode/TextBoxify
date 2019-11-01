@@ -10,6 +10,6 @@ package offers the ability to easily customize the boxes."""
 from .text import Text
 from .textbox import TextBox, TextBoxFrame
 
-# Border sprites are available with `textboxify.border.DARK` after import or
-# could be imported as: `from textboxify.border import DARK, LIGHT`.
-from . import borders as border
+# Border sprites are available with `textboxify.borders.DARK` after import or
+# could be imported as: `textboxify.borders import *`.
+from . import borders
