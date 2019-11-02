@@ -4,7 +4,7 @@ import pygame
 from pygame import locals
 
 # Imports from the textboxify package.
-from textboxify.borders import DARK, BLINK, LIGHT
+from textboxify.borders import BARBER_POLE
 from textboxify import Text, TextBoxFrame
 #from textboxify.util import load_image
 
@@ -17,7 +17,7 @@ def main():
 
 
     info_1 = "TEXTBOXIFY"
-    dialog_text = "Hello! This is a simple example of how TextBoxify can be implemented in Pygame games."
+    dialog_text = "Example of a textbox with animated borders!"
 
     # Create simple text with textboxify.
     info_text_1 = Text(text=info_1, font="Source Code Pro", size=65, color=(255, 255, 255))
@@ -31,8 +31,8 @@ def main():
         padding=(150, 100),
         font_size=16,
         font_name="Source Code Variable",
-        bg_color=(80, 80, 80),
-        border=BLINK,
+        bg_color=(138, 138, 138),
+        border=BARBER_POLE,
     )
 
     # Optionally: add an animated or static image to indicate that the box is
