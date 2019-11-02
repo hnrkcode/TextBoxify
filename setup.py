@@ -20,7 +20,7 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     package_data={
         "textboxify": [
-            "data/border/default/*.png",
+            "data/border/*/*.png",
             "data/indicator/*.png",
             "data/portrait/*.png",
         ],
