@@ -71,7 +71,6 @@ class TextBoxFrame(pygame.sprite.DirtySprite):
 
         self.size = self._adjust((w, h))
         self.image = pygame.Surface(self.size).convert()
-        self.image.fill(bg_color)
         self.rect = self.image.get_rect()
         self.rect.topleft = pos
 
@@ -129,7 +128,6 @@ class TextBoxFrame(pygame.sprite.DirtySprite):
         pos = self.rect.topleft
         self.size = self._adjust(size)
         self.image = pygame.Surface(self.size).convert()
-        self.image.fill(self.__bg_color)
         self.rect = self.image.get_rect()
         self.rect.topleft = pos
 
