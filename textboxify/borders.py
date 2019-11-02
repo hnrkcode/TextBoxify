@@ -25,3 +25,10 @@ BLINK = {
     "colorkey": (11, 219, 6),
     "animate": True,
 }
+BARBER_POLE = {
+    "corner": os.path.join(BORDER_DIR, "barber_pole", "corner.png"),
+    "side": os.path.join(BORDER_DIR, "barber_pole", "side.png"),
+    "size": [20, 20],
+    "colorkey": (11, 219, 6),
+    "animate": True,
+}
