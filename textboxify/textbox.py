@@ -162,17 +162,8 @@ class TextBoxFrame(pygame.sprite.DirtySprite):
         # Set box padding.
         padding = (self.__padding[0] // 2, self.__padding[1] // 2)
 
-        if self.__portrait:
-            self.__portrait.animate(pygame.time.get_ticks())
-            pos = (padding[0] - 10, padding[1])
-            self.image.blit(self.__portrait.image, pos)
-
-            # Draw the new text.
-            self.image.blit(
-                self.__textbox.image, (padding[0] + self.__portrait.width, padding[1])
-            )
-        else:
-            self.image.blit(self.__textbox.image, padding)
+        # Draw text with or without a portrait.
+        self._draw_content(self.image, self.__textbox, self.__portrait, padding)
 
         # Draw animated idling symbol.
         if self.__textbox.idle and self.__indicator:
@@ -234,6 +225,19 @@ class TextBoxFrame(pygame.sprite.DirtySprite):
             surface.fill(color)
 
         return surface
+
+    def _draw_content(self, surface, text, portrait, padding):
+        """Draw box text and portrait."""
+
+        if portrait:
+            portrait.animate(pygame.time.get_ticks())
+            pos = (padding[0] - 10, padding[1])
+            surface.blit(portrait.image, pos)
+
+            # Draw new text.
+            surface.blit(text.image, (padding[0] + portrait.width, padding[1]))
+        else:
+            surface.blit(text.image, padding)
 
     def _draw_border(self):
         """Draws the border and then fixes the corners if needed."""
