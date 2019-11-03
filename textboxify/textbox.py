@@ -166,15 +166,7 @@ class TextBoxFrame(pygame.sprite.DirtySprite):
         self._draw_content(self.image, self.__textbox, self.__portrait, padding)
 
         # Draw animated idling symbol.
-        if self.__textbox.idle and self.__indicator:
-            self.__indicator.animate(pygame.time.get_ticks())
-            pos = (
-                self.size[0] - padding[0],
-                self.__textbox.linesize * self.__lines
-                + padding[1]
-                - self.__indicator.height,
-            )
-            self.image.blit(self.__indicator.image, pos)
+        self._draw_indicator(self.image, self.__textbox, self.__indicator, self.__lines, padding)
 
         # Draw box border.
         self._draw_border()
@@ -238,6 +230,15 @@ class TextBoxFrame(pygame.sprite.DirtySprite):
             surface.blit(text.image, (padding[0] + portrait.width, padding[1]))
         else:
             surface.blit(text.image, padding)
+
+    def _draw_indicator(self, surface, text, indicator, lines, padding):
+        """Draw animated idling symbol"""
+
+        if text.idle and indicator:
+            x = surface.get_width() - padding[0]
+            y = text.linesize * lines + padding[1] - indicator.height
+            indicator.animate(pygame.time.get_ticks())
+            surface.blit(indicator.image, (x, y))
 
     def _draw_border(self):
         """Draws the border and then fixes the corners if needed."""
