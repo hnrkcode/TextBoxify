@@ -4,7 +4,7 @@ import pygame
 
 from . import settings
 from .text import Text
-from .util import CustomSprite, load_image, fix_corners
+from .util import CustomSprite, fix_corners, load_image
 
 
 class TextBoxFrame(pygame.sprite.DirtySprite):
@@ -48,12 +48,28 @@ class TextBoxFrame(pygame.sprite.DirtySprite):
 
         # Sprites of topleft and left corner that will be rotated and reused.
         if border:
-            self.__corner = CustomSprite(self.__border["corner"], self.__border["size"], self.__border["colorkey"])
-            self.__side = CustomSprite(self.__border["side"], self.__border["size"], self.__border["colorkey"])
+            self.__corner = CustomSprite(
+                self.__border["corner"],
+                self.__border["size"],
+                self.__border["colorkey"],
+            )
+            self.__side = CustomSprite(
+                self.__border["side"],
+                self.__border["size"],
+                self.__border["colorkey"]
+            )
         # Use default border sprites.
         else:
-            self.__corner = CustomSprite(self.__border["corner"], self.__border["size"], self.__border["colorkey"])
-            self.__side = CustomSprite(self.__border["side"], self.__border["size"], self.__border["colorkey"])
+            self.__corner = CustomSprite(
+                self.__border["corner"],
+                self.__border["size"],
+                self.__border["colorkey"],
+            )
+            self.__side = CustomSprite(
+                self.__border["side"],
+                self.__border["size"],
+                self.__border["colorkey"]
+            )
 
         self.__blocks = {
             "TOP_LEFT": self.__corner.image,
@@ -89,7 +105,11 @@ class TextBoxFrame(pygame.sprite.DirtySprite):
         if sprite:
             self.__indicator = CustomSprite(sprite, size, colorkey, scale)
         else:
-            self.__indicator = CustomSprite(settings.DEFAULT_INDICATOR["file"], settings.DEFAULT_INDICATOR["size"], (0, 0, 0))
+            self.__indicator = CustomSprite(
+                settings.DEFAULT_INDICATOR["file"],
+                settings.DEFAULT_INDICATOR["size"],
+                (0, 0, 0),
+            )
 
     def set_portrait(self, sprite=None, size=None, colorkey=None):
         """Initilize picture of the character in the box."""
@@ -104,12 +124,7 @@ class TextBoxFrame(pygame.sprite.DirtySprite):
             if not size:
                 raise SystemExit("Error: Need to give a size for the portrait sprite.")
 
-            self.__portrait = CustomSprite(
-                file=sprite,
-                size=size,
-                colorkey=colorkey,
-                scale=scale,
-            )
+            self.__portrait = CustomSprite(sprite, size, colorkey, scale)
 
         # Use default portrait sprite.
         else:
@@ -142,8 +157,14 @@ class TextBoxFrame(pygame.sprite.DirtySprite):
 
         if self.__textbox.full:
             self.__textbox.reset()
-            # Draw box border.
-            self._draw_border(self.image, self.__border, self.__corner, self.__side, self.__blocks, self.__bg_color)
+            self._draw_border(
+                self.image,
+                self.__border,
+                self.__corner,
+                self.__side,
+                self.__blocks,
+                self.__bg_color,
+            )
 
     def hard_reset(self):
         """Reset box to default values when whole message has been printed."""
@@ -167,10 +188,19 @@ class TextBoxFrame(pygame.sprite.DirtySprite):
         self._draw_content(self.image, self.__textbox, self.__portrait, padding)
 
         # Draw animated idling symbol.
-        self._draw_indicator(self.image, self.__textbox, self.__indicator, self.__lines, padding)
+        self._draw_indicator(
+            self.image, self.__textbox, self.__indicator, self.__lines, padding
+        )
 
         # Draw box border.
-        self._draw_border(self.image, self.__border, self.__corner, self.__side, self.__blocks, self.__bg_color)
+        self._draw_border(
+            self.image,
+            self.__border,
+            self.__corner,
+            self.__side,
+            self.__blocks,
+            self.__bg_color,
+        )
 
         self.dirty = 1
 
@@ -273,7 +303,7 @@ class TextBoxFrame(pygame.sprite.DirtySprite):
             surface=surface,
             corner_size=corner.image.get_size(),
             bg_color=bg_color,
-            colorkey=border["colorkey"]
+            colorkey=border["colorkey"],
         )
 
 
@@ -300,9 +330,7 @@ class TextBox(pygame.sprite.DirtySprite):
         else:
             self.words = ""
 
-        self.linesize = Text(
-            text=" ", font=font_name, size=font_size
-        ).linesize
+        self.linesize = Text(text=" ", font=font_name, size=font_size).linesize
 
         self.__font_name = font_name
         self.__font_size = font_size
