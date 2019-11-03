@@ -1,26 +1,65 @@
 """Simple example to illustrate how TextBoxify can be implemented."""
 
+import random
+
+import numpy
 import pygame
 from pygame import locals
 
+from textboxify import Text, TextBoxFrame
+
 # Imports from the textboxify package.
 from textboxify.borders import BARBER_POLE
-from textboxify import Text, TextBoxFrame
-#from textboxify.util import load_image
+from textboxify.util import load_image
+
+WIDTH, HEIGHT = 640, 360
+
+
+def random_color():
+    """Return random RGB value."""
+
+    r = random.choice(range(255))
+    g = random.choice(range(255))
+    b = random.choice(range(255))
+
+    return (r, g, b)
+
+
+def draw_background(surface):
+    """Draw checkered pattern with random colors as background."""
+
+    x, y, size = 0, 0, 100
+    block = numpy.zeros((WIDTH, HEIGHT, 3))
+
+    for h in range(HEIGHT // size + 1):
+        for w in range(WIDTH // size + 1):
+            block[x : x + size, y : y + size :] = random_color()
+            x += size
+        x = 0
+        y += size
+
+    pygame.surfarray.blit_array(surface, block)
+
 
 def main():
+
     pygame.init()
-    screen = pygame.display.set_mode((640, 360))
+    screen = pygame.display.set_mode((WIDTH, HEIGHT))
     background = pygame.Surface(screen.get_size())
-    #bg_img = load_image("../../bg.png")
-    #background.blit(bg_img, (0, 0))
 
+    draw_background(background)
 
-    info_1 = "TEXTBOXIFY"
+    header_text = "TEXTBOXIFY"
     dialog_text = "Example of a textbox with animated borders!"
 
     # Create simple text with textboxify.
-    info_text_1 = Text(text=info_1, font="Source Code Pro", size=65, color=(255, 255, 255))
+    header = Text(
+        text=header_text,
+        font="Source Code Pro",
+        size=65,
+        color=(255, 255, 255),
+        background=random_color(),
+    )
 
     # Customize and initialize a new dialog box.
     dialog_box = TextBoxFrame(
@@ -30,9 +69,13 @@ def main():
         pos=(50, 120),
         padding=(150, 100),
         font_size=16,
-        font_name="Source Code Variable",
-        bg_color=(138, 138, 138),
+        font_name="Source Code Pro",
+        bg_color=(50, 50, 50),
+        # Uses 'BARBER_POLE' border which is an animated border.
         border=BARBER_POLE,
+        # Alpha argument take a value from 0 (transparent) to 255 (opaque),
+        # which sets the degree of transparency the boxes background should have.
+        alpha=200,
     )
 
     # Optionally: add an animated or static image to indicate that the box is
@@ -55,7 +98,7 @@ def main():
         pygame.time.Clock().tick(60)
 
         # Draw textboxify text object to the screen.
-        background.blit(info_text_1.image, (130,30))
+        background.blit(header.image, (130, 30))
 
         for event in pygame.event.get():
             if event.type == locals.KEYDOWN:
