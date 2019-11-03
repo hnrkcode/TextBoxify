@@ -5,8 +5,10 @@ def fix_corners(surface, corner_size, bg_color, colorkey):
     """Remove pixels outside rounded corners."""
 
     pixels = []
-    bg_color = (*bg_color, 255)
     w, h = corner_size
+
+    if colorkey:
+        colorkey = (*colorkey, 0)
 
     # Upper left corner.
     for y in range(h):
@@ -43,6 +45,7 @@ def fix_corners(surface, corner_size, bg_color, colorkey):
     for pixel in pixels:
         surface.set_at(pixel, colorkey)
 
+    # Removes pixels outside corners when background is opaque.
     surface.set_colorkey(colorkey)
 
 def load_image(file, colorkey=None):

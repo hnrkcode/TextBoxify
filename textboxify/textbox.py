@@ -20,7 +20,7 @@ class TextBoxFrame(pygame.sprite.DirtySprite):
         font_size=35,
         bg_color=(0, 0, 0),
         border=None,
-        transparent=False,
+        alpha=255,
     ):
         super().__init__()
 
@@ -34,12 +34,13 @@ class TextBoxFrame(pygame.sprite.DirtySprite):
             font_size=font_size,
             font_color=font_color,
             bg_color=bg_color,
-            transparent=transparent,
+            transparent=False if alpha == 255 else True,
         )
 
+        self.__alpha = alpha
         self.__lines = lines
         self.__text_width = text_width
-        self.__bg_color = bg_color
+        self.__bg_color = (*bg_color, alpha)
         self.__padding = padding
         self.__indicator = None
         self.__portrait = None
@@ -154,7 +155,14 @@ class TextBoxFrame(pygame.sprite.DirtySprite):
         # Update the text.
         self.__textbox.update()
         self.words = self.__textbox.words
-        self.image.fill(self.__bg_color)
+
+        # Draw background with transparency.
+        if 0 <= self.__alpha < 255:
+            self.image = self.image.convert_alpha()
+            self.image.fill(self.__bg_color)
+        # No transparency.
+        else:
+            self.image.fill(self.__bg_color)
 
         # Set box padding.
         padding = (self.__padding[0] // 2, self.__padding[1] // 2)
