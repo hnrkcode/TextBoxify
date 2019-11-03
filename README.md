@@ -11,6 +11,10 @@ TextBoxify is a package for easily creating text and dialog boxes in Python game
 
 ## Setup
 
+Install [textboxify](https://pypi.org/project/textboxify/) from Python Package Index: `pip install textboxify`
+
+## Develop
+
 It's recommended to install the package in a virtual environment to avoid conflicts with different versions of the same packages.
 
 1. Create virtual environment:
@@ -22,8 +26,6 @@ It's recommended to install the package in a virtual environment to avoid confli
   `source [dir]/bin/activate`
 
 3. Installation:
-
-  `pip install textboxify`
 
   To install the code from Github, clone the repository and install it in editable mode `-e` to edit the code without having to reinstall it for the changes to have effect.
 
