@@ -157,12 +157,7 @@ class TextBoxFrame(pygame.sprite.DirtySprite):
         self.words = self.__textbox.words
 
         # Draw background with transparency.
-        if 0 <= self.__alpha < 255:
-            self.image = self.image.convert_alpha()
-            self.image.fill(self.__bg_color)
-        # No transparency.
-        else:
-            self.image.fill(self.__bg_color)
+        self.image = self._draw_background(self.image, self.__bg_color, self.__alpha)
 
         # Set box padding.
         padding = (self.__padding[0] // 2, self.__padding[1] // 2)
@@ -225,6 +220,20 @@ class TextBoxFrame(pygame.sprite.DirtySprite):
             for block in range(1, dest_w // src_h - 1):
                 dest.blit(blocks["TOP"], (0 + src_w * block, 0))
                 dest.blit(blocks["BOTTOM"], (0 + src_w * block, dest_h - src_h))
+
+    def _draw_background(self, surface, color, alpha):
+        """Draw box background."""
+
+        # Draw background with transparency.
+        if 0 <= alpha < 255:
+            surface = surface.convert_alpha()
+            surface.fill(color)
+
+        # Draw background with no transparency.
+        else:
+            surface.fill(color)
+
+        return surface
 
     def _draw_border(self):
         """Draws the border and then fixes the corners if needed."""
