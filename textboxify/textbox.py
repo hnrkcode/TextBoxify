@@ -75,7 +75,7 @@ class TextBoxFrame(pygame.sprite.DirtySprite):
         w = text_width + padding[0]
         h = self.__textbox.linesize * lines + padding[1]
 
-        self.size = self._adjust((w, h))
+        self.size = self._adjust((w, h), self.__side)
         self.image = pygame.Surface(self.size).convert()
         self.rect = self.image.get_rect()
         self.rect.topleft = pos
@@ -131,7 +131,7 @@ class TextBoxFrame(pygame.sprite.DirtySprite):
 
         # Update textbox data with portrait implemented.
         pos = self.rect.topleft
-        self.size = self._adjust(size)
+        self.size = self._adjust(size, self.__side)
         self.image = pygame.Surface(self.size).convert()
         self.rect = self.image.get_rect()
         self.rect.topleft = pos
@@ -191,11 +191,11 @@ class TextBoxFrame(pygame.sprite.DirtySprite):
 
         self.dirty = 1
 
-    def _adjust(self, size):
+    def _adjust(self, size, side):
         """Adjust the box size after the box border sprites."""
 
-        w = size[0] - size[0] % self.__side.image.get_width()
-        h = size[1] - size[1] % self.__side.image.get_height()
+        w = size[0] - size[0] % side.width
+        h = size[1] - size[1] % side.height
 
         return (w, h)
 
