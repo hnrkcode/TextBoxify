@@ -71,17 +71,6 @@ class TextBoxFrame(pygame.sprite.DirtySprite):
                 self.__border["colorkey"]
             )
 
-        self.__blocks = {
-            "TOP_LEFT": self.__corner.image,
-            "TOP_RIGHT": pygame.transform.rotate(self.__corner.image, -90),
-            "BOTTOM_LEFT": pygame.transform.rotate(self.__corner.image, 90),
-            "BOTTOM_RIGHT": pygame.transform.rotate(self.__corner.image, 180),
-            "LEFT": self.__side.image,
-            "TOP": pygame.transform.rotate(self.__side.image, -90),
-            "BOTTOM": pygame.transform.rotate(self.__side.image, 90),
-            "RIGHT": pygame.transform.rotate(self.__side.image, 180),
-        }
-
         # Text box size including the frame.
         w = text_width + padding[0]
         h = self.__textbox.linesize * lines + padding[1]
@@ -162,7 +151,6 @@ class TextBoxFrame(pygame.sprite.DirtySprite):
                 self.__border,
                 self.__corner,
                 self.__side,
-                self.__blocks,
                 self.__bg_color,
             )
 
@@ -198,7 +186,6 @@ class TextBoxFrame(pygame.sprite.DirtySprite):
             self.__border,
             self.__corner,
             self.__side,
-            self.__blocks,
             self.__bg_color,
         )
 
@@ -271,25 +258,15 @@ class TextBoxFrame(pygame.sprite.DirtySprite):
             indicator.animate(pygame.time.get_ticks())
             surface.blit(indicator.image, (x, y))
 
-    def _draw_border(self, surface, border, corner, side, blocks, bg_color):
+    def _draw_border(self, surface, border, corner, side, bg_color):
         """Draws the border and then fixes the corners if needed."""
+
+        blocks = self._rotate_border_blocks(corner, side)
 
         # Animation is turned on.
         if border["animate"]:
             corner.animate(pygame.time.get_ticks())
             side.animate(pygame.time.get_ticks())
-
-            blocks = {
-                "TOP_LEFT": corner.image,
-                "TOP_RIGHT": pygame.transform.rotate(corner.image, -90),
-                "BOTTOM_LEFT": pygame.transform.rotate(corner.image, 90),
-                "BOTTOM_RIGHT": pygame.transform.rotate(corner.image, 180),
-                "LEFT": side.image,
-                "TOP": pygame.transform.rotate(side.image, -90),
-                "BOTTOM": pygame.transform.rotate(side.image, 90),
-                "RIGHT": pygame.transform.rotate(side.image, 180),
-            }
-
             self._blit_border(corner.image, surface, blocks, "CORNER")
             self._blit_border(side.image, surface, blocks, "SIDE")
 
@@ -305,6 +282,22 @@ class TextBoxFrame(pygame.sprite.DirtySprite):
             bg_color=bg_color,
             colorkey=border["colorkey"],
         )
+
+    def _rotate_border_blocks(self, corner, side):
+        """Return dictionary with rotated border sprites."""
+
+        blocks = {
+            "TOP_LEFT": corner.image,
+            "TOP_RIGHT": pygame.transform.rotate(corner.image, -90),
+            "BOTTOM_LEFT": pygame.transform.rotate(corner.image, 90),
+            "BOTTOM_RIGHT": pygame.transform.rotate(corner.image, 180),
+            "LEFT": side.image,
+            "TOP": pygame.transform.rotate(side.image, -90),
+            "BOTTOM": pygame.transform.rotate(side.image, 90),
+            "RIGHT": pygame.transform.rotate(side.image, 180),
+        }
+
+        return blocks
 
 
 class TextBox(pygame.sprite.DirtySprite):
