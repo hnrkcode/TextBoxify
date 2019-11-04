@@ -278,7 +278,7 @@ class TextBoxFrame(pygame.sprite.DirtySprite):
         # Make pixels outside rounded corners transparent.
         fix_corners(
             surface=surface,
-            corner_size=corner.image.get_size(),
+            corner_size=corner.size,
             bg_color=bg_color,
             colorkey=border["colorkey"],
         )

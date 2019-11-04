@@ -130,5 +130,9 @@ class CustomSprite(AnimateSprite):
     def height(self):
         return self.rect.height
 
+    @property
+    def size(self):
+        return self.image.get_size()
+
     def update(self):
         self.dirty = 1
