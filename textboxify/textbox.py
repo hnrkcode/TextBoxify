@@ -141,23 +141,23 @@ class TextBoxFrame(pygame.sprite.DirtySprite):
 
         self.__textbox.set_text(text)
 
-    def reset(self):
-        """Reset the filled box and continue with the remaining words."""
+    def reset(self, hard=False):
+        """Reset dialog box."""
 
-        if self.__textbox.full:
-            self.__textbox.reset()
-            self._draw_border(
-                self.image,
-                self.__border,
-                self.__corner,
-                self.__side,
-                self.__bg_color,
-            )
-
-    def hard_reset(self):
-        """Reset box to default values when whole message has been printed."""
-
-        self.__textbox.hard_reset()
+        if hard:
+            # Reset to default values.
+            self.__textbox.reset(hard)
+        else:
+            # Reset the filled box and continue with the remaining words.
+            if self.__textbox.full:
+                self.__textbox.reset()
+                self._draw_border(
+                    self.image,
+                    self.__border,
+                    self.__corner,
+                    self.__side,
+                    self.__bg_color,
+                )
 
     def update(self):
         """Update the text box."""
@@ -361,28 +361,29 @@ class TextBox(pygame.sprite.DirtySprite):
 
         self.words = self._to_list(text)
 
-    def hard_reset(self):
-        """Reset box to default values when whole message has been printed."""
+    def reset(self, hard=False):
+        """Reset dialog box."""
 
-        self.__x, self.__y = 0, 0
-        self.full = False
-        self.idle = False
-        self.image = pygame.Surface((self.__w, self.__h)).convert()
-        self.image.fill(self.__bg_color)
-        self.rect = self.image.get_rect()
-        self.rect.topleft = self.__pos
-
-        if self.__transparent:
-            self.image.set_colorkey(self.__bg_color)
-
-    def reset(self):
-        """Reset the filled box and continue with the remaining words."""
-
-        if self.full:
-            self.image.fill(self.__bg_color)
+        # Reset box to default values when whole message has been printed.
+        if hard:
             self.__x, self.__y = 0, 0
             self.full = False
             self.idle = False
+            self.image = pygame.Surface((self.__w, self.__h)).convert()
+            self.image.fill(self.__bg_color)
+            self.rect = self.image.get_rect()
+            self.rect.topleft = self.__pos
+
+            if self.__transparent:
+                self.image.set_colorkey(self.__bg_color)
+
+        # Reset the filled box and continue with the remaining words.
+        else:
+            if self.full:
+                self.image.fill(self.__bg_color)
+                self.__x, self.__y = 0, 0
+                self.full = False
+                self.idle = False
 
     def update(self):
         """Update the text box."""

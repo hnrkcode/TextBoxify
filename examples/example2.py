@@ -69,7 +69,7 @@ def main():
                         # to default values, set a new text to print out and close
                         # down itself.
                         else:
-                            dialog_box.hard_reset()
+                            dialog_box.reset(hard=True)
                             dialog_box.kill()
 
             if event.type == locals.KEYDOWN:
