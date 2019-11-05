@@ -41,6 +41,8 @@ To use the package just write `import textboxify` in your python modules and sta
 
 ## Example
 
+This example is based of the code in ``examples/example.py``
+
 This is how you could initialize and customize a dialog box with `TextBoxFrame`, which creates a dialog box with a border and optional features like animated portrait and idling symbol.
 
 ```Python
@@ -72,16 +74,27 @@ if not dialog_group:
     dialog_group.add(dialog_box)
 ```
 
-To deactivate it you removes it from the sprite group.
+You can check if all words has pin printed, if there are still words to print,
+you can continue printing the remaining words by reseting the box so the words
+in the box are erased like this.
 
 ```Python
-dialog_box.kill()
+if dialog_box.words:
+    dialog_box.reset()
 ```
 
-If you want to reuse the text box, you should first call `hard_reset()` and if you also want to set a new message call `set_text()`.
+If there isn't any words left to print you can close the box with.
 
 ```Python
-dialog_box.hard_reset()
+else:
+    dialog_box.kill()
+```
+
+That will deactivate the box and remove it from the sprite group.
+If you want to reuse the text box, you should first call `reset(hard=True)` and if you also want to set a new message call `set_text()`.
+
+```Python
+dialog_box.reset(hard=True)
 dialog_box.set_text("Happy coding!")
 ```
 
