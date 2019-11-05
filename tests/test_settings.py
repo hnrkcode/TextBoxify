@@ -7,8 +7,6 @@ from textboxify import settings
 class TestSettings(unittest.TestCase):
 
     def test_file_exists(self):
-        self.assertTrue(os.path.isfile(settings.DEFAULT_BORDER["corner"]))
-        self.assertTrue(os.path.isfile(settings.DEFAULT_BORDER["side"]))
         self.assertTrue(os.path.isfile(settings.DEFAULT_INDICATOR["file"]))
         self.assertTrue(os.path.isfile(settings.DEFAULT_PORTRAIT["file"]))
 
@@ -18,8 +16,6 @@ class TestSettings(unittest.TestCase):
         self.assertTrue(os.path.exists(settings.BORDER_DIR))
         self.assertTrue(os.path.exists(settings.INDICATOR_DIR))
         self.assertTrue(os.path.exists(settings.PORTRAIT_DIR))
-        self.assertTrue(os.path.exists(settings.DEFAULT_BORDER["corner"]))
-        self.assertTrue(os.path.exists(settings.DEFAULT_BORDER["side"]))
         self.assertTrue(os.path.exists(settings.DEFAULT_INDICATOR["file"]))
         self.assertTrue(os.path.exists(settings.DEFAULT_PORTRAIT["file"]))
 
@@ -37,13 +33,9 @@ class TestSettings(unittest.TestCase):
         self.assertListEqual(settings.PORTRAIT_DIR.split("/")[-2:], ['data', 'portrait'])
 
     def test_file_names(self):
-        self.assertEqual(os.path.basename(settings.DEFAULT_BORDER["corner"]), "corner.png")
-        self.assertEqual(os.path.basename(settings.DEFAULT_BORDER["side"]), "side.png")
         self.assertEqual(os.path.basename(settings.DEFAULT_INDICATOR["file"]), "idle.png")
         self.assertEqual(os.path.basename(settings.DEFAULT_PORTRAIT["file"]), "placeholder.png")
 
     def test_file_paths(self):
-        self.assertEqual(os.path.split(os.path.dirname(settings.DEFAULT_BORDER["corner"]))[1], "default")
-        self.assertEqual(os.path.split(os.path.dirname(os.path.dirname(settings.DEFAULT_BORDER["corner"])))[1], "border")
         self.assertEqual(os.path.split(os.path.dirname(settings.DEFAULT_INDICATOR["file"]))[1], "indicator")
         self.assertEqual(os.path.split(os.path.dirname(settings.DEFAULT_PORTRAIT["file"]))[1], "portrait")

@@ -75,27 +75,20 @@ class TextBoxFrame(pygame.sprite.DirtySprite):
         self.__padding = padding
         self.__indicator = None
         self.__portrait = None
-        self.__border = border if border else settings.DEFAULT_BORDER
+        self.__border = border
 
-        # Sprites of topleft and left corner that will be rotated and reused.
-        if border:
+        # Always check if border evaluate to true because corner and side
+        # doesn't get created when there isn't any border to draw.
+        if self.__border:
+
+            # Create topleft corner sprite.
             self.__corner = CustomSprite(
                 self.__border["corner"],
                 self.__border["size"],
                 self.__border["colorkey"],
             )
-            self.__side = CustomSprite(
-                self.__border["side"],
-                self.__border["size"],
-                self.__border["colorkey"]
-            )
-        # Use default border sprites.
-        else:
-            self.__corner = CustomSprite(
-                self.__border["corner"],
-                self.__border["size"],
-                self.__border["colorkey"],
-            )
+
+            # Create left side sprite.
             self.__side = CustomSprite(
                 self.__border["side"],
                 self.__border["size"],
@@ -106,7 +99,7 @@ class TextBoxFrame(pygame.sprite.DirtySprite):
         w = text_width + padding[0]
         h = self.__textbox.linesize * lines + padding[1]
 
-        self.size = self._adjust((w, h), self.__side)
+        self.size = self._adjust((w, h), self.__side) if self.__border else (w, h)
         self.image = pygame.Surface(self.size).convert()
         self.rect = self.image.get_rect()
         self.rect.topleft = pos
@@ -191,7 +184,7 @@ class TextBoxFrame(pygame.sprite.DirtySprite):
 
         # Update textbox data with portrait implemented.
         pos = self.rect.topleft
-        self.size = self._adjust(size, self.__side)
+        self.size = self._adjust(size, self.__side) if self.__border else size
         self.image = pygame.Surface(self.size).convert()
         self.rect = self.image.get_rect()
         self.rect.topleft = pos
@@ -222,13 +215,15 @@ class TextBoxFrame(pygame.sprite.DirtySprite):
             # Reset the filled box and continue with the remaining words.
             if self.__textbox.full:
                 self.__textbox.reset()
-                self._draw_border(
-                    self.image,
-                    self.__border,
-                    self.__corner,
-                    self.__side,
-                    self.__bg_color,
-                )
+
+                if self.__border:
+                    self._draw_border(
+                        self.image,
+                        self.__border,
+                        self.__corner,
+                        self.__side,
+                        self.__bg_color,
+                    )
 
     def update(self):
         """Update all changes that has been made to the text box."""
@@ -252,13 +247,14 @@ class TextBoxFrame(pygame.sprite.DirtySprite):
         )
 
         # Draw box border.
-        self._draw_border(
-            self.image,
-            self.__border,
-            self.__corner,
-            self.__side,
-            self.__bg_color,
-        )
+        if self.__border:
+            self._draw_border(
+                self.image,
+                self.__border,
+                self.__corner,
+                self.__side,
+                self.__bg_color,
+            )
 
         self.dirty = 1
 

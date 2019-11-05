@@ -17,10 +17,11 @@ Note:
     - "animate" is a boolean value that tells if the border is animated.
 
 Attributes:
+    DEFAULT (dict):
     DARK (dict):
     LIGHT (dict):
-    BLINK (dict):
-    BARBER_POLE (dict):
+    BLINK (dict): this is an animated border.
+    BARBER_POLE (dict): this is an animated border.
 
 """
 
@@ -31,6 +32,13 @@ from .settings import BORDER_DIR
 
 
 # Border sprites.
+DEFAULT = {
+    "corner": os.path.join(BORDER_DIR, "default", "corner.png"),
+    "side": os.path.join(BORDER_DIR, "default", "side.png"),
+    "size": [10, 10],
+    "colorkey": None,
+    "animate": False,
+}
 DARK = {
     "corner": os.path.join(BORDER_DIR, "dark", "corner.png"),
     "side": os.path.join(BORDER_DIR, "dark", "side.png"),
