@@ -17,10 +17,11 @@ Note:
     - "animate" is a boolean value that tells if the border is animated.
 
 Attributes:
+    DEFAULT (dict):
     DARK (dict):
     LIGHT (dict):
-    BLINK (dict):
-    BARBER_POLE (dict):
+    BLINK (dict): this is an animated border.
+    BARBER_POLE (dict): this is an animated border.
 
 """
 
