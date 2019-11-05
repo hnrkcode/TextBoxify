@@ -31,6 +31,13 @@ from .settings import BORDER_DIR
 
 
 # Border sprites.
+DEFAULT = {
+    "corner": os.path.join(BORDER_DIR, "default", "corner.png"),
+    "side": os.path.join(BORDER_DIR, "default", "side.png"),
+    "size": [10, 10],
+    "colorkey": None,
+    "animate": False,
+}
 DARK = {
     "corner": os.path.join(BORDER_DIR, "dark", "corner.png"),
     "side": os.path.join(BORDER_DIR, "dark", "side.png"),
