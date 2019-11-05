@@ -1,3 +1,17 @@
+"""This module contains classes for creating text boxes.
+
+Both TextBox and TextBoxFrame are the same when it comes to print out
+text inside a box on the screen. However, TextBox has less features than
+TextBoxFrame.
+
+TextBox is useful if you only want to print out text on the
+screen without much configurations.
+
+TextBoxFrame is useful if you want to design unique dialog boxes with certain
+borders, backgrounds, portraits, indication symbols and animations.
+"""
+
+
 import string
 
 import pygame
@@ -8,6 +22,23 @@ from .util import CustomSprite, fix_corners, load_image
 
 
 class TextBoxFrame(pygame.sprite.DirtySprite):
+    """Class for creating customizable dialog boxes.
+
+    Args:
+        text_width (int): max with of the printed text (required).
+        pos (tuple): x & y coordinates to place the topleft corner of the box (required).
+        lines (int): number of printed lines.
+        text (str): Text to print.
+        padding (tuple): space between text and border.
+        font_color (tuple): text color, RGB value.
+        font_name (str): name of a installed font or path to a font file.
+        font_size (int): size of the text font.
+        bg_color (tuple): background color, RGB value.
+        border (dict): border sprite settings.
+        alpha (int): value from 0 to 255, were 0-254 is transparent and 255 is opaque.
+
+    """
+
     def __init__(
         self,
         text_width,
@@ -82,6 +113,8 @@ class TextBoxFrame(pygame.sprite.DirtySprite):
 
     @property
     def words(self):
+        """list: Return list with all words not yet printed."""
+
         return self.__textbox.words
 
     @words.setter
@@ -89,7 +122,18 @@ class TextBoxFrame(pygame.sprite.DirtySprite):
         self.__words = words
 
     def set_indicator(self, sprite=None, size=None, colorkey=None, scale=None):
-        """Initilize animated idle symbol."""
+        """Initilize animated idle symbol.
+
+        Note:
+            If sprite is ommited, the default indicator
+            will be used and all other arguments will be ignored.
+
+        Args:
+            sprite (str): path to sprite file.
+            size (tuple): width, height of sprite frame.
+            colorkey (tuple): color to remove from sprite, RGB value.
+            scale (tuple): new width, height to scale sprite to.
+        """
 
         if sprite:
             self.__indicator = CustomSprite(sprite, size, colorkey, scale)
@@ -101,7 +145,23 @@ class TextBoxFrame(pygame.sprite.DirtySprite):
             )
 
     def set_portrait(self, sprite=None, size=None, colorkey=None):
-        """Initilize picture of the character in the box."""
+        """Initilize portrait image on the left side of the text.
+
+        Note:
+            The sprite will be scaled to be the same size as the total
+            height of the text line limit.
+
+        Note:
+            If sprite is ommited, a default placeholder animation
+            will be used and all other arguments will be ignored.
+
+        Args:
+            sprite (str): path to sprite file.
+            size (tuple): width, height of sprite frame.
+            colorkey (tuple): color to remove from sprite, RGB value.
+            scale (tuple): new width, height to scale sprite to.
+
+        """
 
         # Set portrait to have the same height as the text lines.
         scale = [self.__textbox.linesize * self.__lines] * 2
@@ -137,12 +197,23 @@ class TextBoxFrame(pygame.sprite.DirtySprite):
         self.rect.topleft = pos
 
     def set_text(self, text):
-        """Set new text message to print out."""
+        """Set new text message to print out.
+
+        Args:
+            words (str): new text to print.
+
+        """
 
         self.__textbox.set_text(text)
 
     def reset(self, hard=False):
-        """Reset dialog box."""
+        """Reset dialog box.
+
+        Args:
+            hard (bool): False only cleans the box before moving to the next
+                page to print the remaining words. True resets the entire class
+                to default values to prepare to print new text from the beginning.
+        """
 
         if hard:
             # Reset to default values.
@@ -160,7 +231,7 @@ class TextBoxFrame(pygame.sprite.DirtySprite):
                 )
 
     def update(self):
-        """Update the text box."""
+        """Update all changes that has been made to the text box."""
 
         # Update the text.
         self.__textbox.update()
@@ -301,6 +372,21 @@ class TextBoxFrame(pygame.sprite.DirtySprite):
 
 
 class TextBox(pygame.sprite.DirtySprite):
+    """Class for creating simple text boxes.
+
+    Args:
+        text_width (int): max with of the printed text (required).
+        pos (tuple): x & y coordinates to place the topleft corner of the box (required).
+        text (str): Text to print.
+        lines (int): number of printed lines.
+        font_name (str): name of a installed font or path to a font file.
+        font_size (int): size of the text font.
+        font_color (tuple): text color, RGB value.
+        bg_color (tuple): background color, RGB value.
+        transparent (bool): if the box should be transparent or have a background color.
+
+    """
+
     def __init__(
         self,
         text_width,
@@ -357,12 +443,23 @@ class TextBox(pygame.sprite.DirtySprite):
             self.image.set_colorkey(bg_color)
 
     def set_text(self, text):
-        """Set new text message to print out."""
+        """Set new text message to print out.
+
+        Args:
+            words (str): new text to print.
+
+        """
 
         self.words = self._to_list(text)
 
     def reset(self, hard=False):
-        """Reset dialog box."""
+        """Reset dialog box.
+
+        Args:
+            hard (bool): False only cleans the box before moving to the next
+                page to print the remaining words. True resets the entire class
+                to default values to prepare to print new text from the beginning.
+        """
 
         # Reset box to default values when whole message has been printed.
         if hard:
@@ -386,7 +483,7 @@ class TextBox(pygame.sprite.DirtySprite):
                 self.idle = False
 
     def update(self):
-        """Update the text box."""
+        """Update all changes that has been made to the text box."""
 
         # Print as long as there are words and text box isn't full.
         if self.words and not self.full:

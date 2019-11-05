@@ -1,3 +1,30 @@
+"""Borders included by default in the package.
+
+This module contains borders that you can use to customize your
+dialog boxes appearances with.
+
+You can also create your own borders by creating python dictionaries that
+contains same keys, but with values to your own sprite settings and pass it as
+an argument to the TextBoxFrame class.
+
+Note:
+    Border variables are python dictionaries and contains five key, value pairs.
+
+    - "corner" is the top left corner sprite.
+    - "side" is the left side sprite.
+    - "size" is a list that contains the sprites width and height.
+    - "colorkey" is a tuple with an RGB value that can be removed from the sprite.
+    - "animate" is a boolean value that tells if the border is animated.
+
+Attributes:
+    DARK (dict):
+    LIGHT (dict):
+    BLINK (dict):
+    BARBER_POLE (dict):
+
+"""
+
+
 import os.path
 
 from .settings import BORDER_DIR
